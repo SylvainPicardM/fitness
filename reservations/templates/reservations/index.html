@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+    <div id="intro">
+        <h1>INTRO</h1>
+    </div>
+    <div class="main_comm">
+        <section id="aqua_bike" class="container-fluid row">
+            <div class="col-12 py-4">
+                <h1>QU'EST CE QUE L' AQUA BIKE ?</h1>
+            </div>
+            <div class="col-4 py-5 my-5 my_card" id="une_seance">
+                <h2 class="py-3">UNE SEANCE</h2>
+                <ul>
+                    <li>Encadré par un Maire-nageur diplomé</li>
+                    <li>Sur une musique rythmée</li>
+                    <li>45 minutes</li>
+                    <li>300 à 500 calories depensées</li>
+                    <li>Esprit collectif et dépassement de soi</li>
+                </ul>
+            </div>
+            <div class="col-4 offset-1 py-5 my-5 my_card" id="benefices">
+                <h2 class="py-3">LES BENEFICES</h2>
+                <ul>
+                    <li>Gomme la cellulite</li>
+                    <li>Affine la silhouette</li>
+                    <li>Rafermit la peau</li>
+                    <li>Perte de poids</li>
+                    <li>Renforcement musculaire</li>
+                </ul>
+            </div>
+        </section>
+        <section id="autres_cours" class="container-fluid">
+            <h1>AUTRES</h1>
+        </section>
+        <section id="infos" class="container-fluid row">
+                <div class="col-4 py-5 my-5 my_card" id="tarifs">
+                    <h2 class="py-3">TARIFS</h2>
+                    <ul>
+                        <li>12 euros la séance</li>
+                        <li>100 euros les 10 séances</li>
+                        <li>160 euros les 20 séances</li>
+                    </ul>
+                </div>
+                <div class="col-4 offset-1 py-5 my-5 my_card" id="horaires">
+                    <h2 class="py-3">HORAIRES</h2>
+                    <ul>
+                        <li>LUNDI 20h15</li>
+                        <li>MERCREDI 19h45</li>
+                        <li>VENDREDI 13h15</li>
+                        <li>SAMEDI 13h</li>
+                    </ul>
+                </div>
+            </section>
+        <section id="contact" class="container-fluid">
+            <h1>CONTACT</h1>
+        </section>
+    </div>
+    <div id="footer">
+        <h1>FOOTER</h1>
+    </div>
+    <style>
+        h1{
+            font-weight: bold;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        ul{
+            /*padding-left: 5rem;*/
+            font-size: 1.5rem;
+        }
+        .main_comm{
+            background-color: #EFF4FA;
+        }
+        .main_comm h1{
+            color: #070F22;
+        }
+        #intro{
+            height: 50rem;
+        }
+        section, .mycard{
+            display: flex;
+            justify-content: center;
+        }
+        section, #footer{
+            padding: 1rem;
+            min-height: 25rem;
+        }
+        #footer{
+            background-color: #2A3A4F; 
+            color: white;
+        }
+        .my_card{
+            color: white;
+            border-radius: .5em;
+            -webkit-box-shadow: 7px 17px 78px -15px rgba(0,0,0,0.75);
+            -moz-box-shadow: 7px 17px 78px -15px rgba(0,0,0,0.75);
+            box-shadow: 7px 17px 78px -15px rgba(0,0,0,0.75);
+        }
+        #une_seance, #tarifs{
+            background-color: #079BB0;
+        }
+        #benefices, #horaires{
+            background-color: #084E56;
+        }
+    </style>
+{% endblock %}

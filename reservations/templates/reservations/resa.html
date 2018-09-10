@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <h1>{{ creneau.cours.nom }} : <small>{{ creneau.date }} à {{ creneau.cours.heure }}h </small></h1>
+    <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
+    <p>Mon nombre de séances restantes: <b>{{ user.credit }}</b></p>
+    <a href="{% url 'reserver' creneau.id %}">RESERVER</a>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid my-5">
+    <p>Semaine du <strong>{{start_week}}</strong> au <strong>{{end_week}}</strong></p>
+    <p>Nombre de séances restantes: <strong>{{ user.credit }}</strong></p>
+    {% if creneaux_list and week_days %}
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <thead class="thead-dark">
+                    <tr class="center">
+                        <th>HEURE</th>
+                        {% for day in week_days %}
+                            <th>{{ day.1 }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for heure, creneaux_heure in creneaux_list.items %}
+                        <tr>
+                            <td class="heure">{{heure}}h</td>
+                            {% for jour, creneau in  creneaux_heure.items %}
+                                {% if creneau is not None %}
+                                    <td class="dispo">
+                                        <a href="{% url 'reservations' creneau.id %}">{{ creneau.cours.nom }}</td></a>
+                                {% else %}
+                                    <td>X</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>Pas de cours disponible a cette date</p>
+    {% endif %}
+    {% if semaine == 0 %}
+        <a class="btn btn-primary btn-sm" href="{% url 'creneaux' semaine|add:1 %}" role="button">NEXT</a>
+    {% else %}
+        <a class="btn btn-secondary btn-sm" href="{% url 'creneaux' 0 %}" role="button">CURRENT WEEK</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'creneaux' semaine|add:-1 %}" role="button">PREVIOUS</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'creneaux' semaine|add:1 %}" role="button">NEXT</a>
+    {% endif %}
+</div>
+    <style>
+        .table td, th {
+            text-align: center;
+        }
+        .dispo{
+            background-color: lightgreen;
+            cursor: pointer;
+        }
+        .dispo:hover{
+            color: blue;
+        }
+        .heure{
+            background-color:lightgray;
+        }
+    </style>
+{% endblock %}
