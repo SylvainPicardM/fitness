@@ -3,39 +3,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, AutoCreneauForm
 from .models import MyUser, Creneau, Cours, Reservation
 import datetime
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+import locale
+locale.setlocale(locale.LC_TIME, '')
 
-def index(request):
-    if request.method == "POST":
-        form = AuthenticationForm()
-        if form.is_valid():
-            username = request.POST['email']
-            password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
-            
-            if user is not None:
-                login(request, user)
-                return render(request,"reservations/index.html", {})
-            else:
-                #TODO: Renvoyer une erreur
-                return render(request, 'reservations/index.html', {'form': form})
-
-    else:
-        form = AuthenticationForm()
-    return render(request, 'reservations/index.html', {'form': form})
-
-def deconnexion(request):
-    logout(request)
-    return render(request, 'reservations/index.html', {})
+class IndexView(generic.TemplateView):
+    template_name = 'reservations/index.html'
 
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('index')
     template_name = 'registration/signup.html'
 
 class CreneauView(LoginRequiredMixin, generic.ListView):
@@ -44,31 +27,38 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        semaine = self.kwargs['semaine']
-        date = datetime.date.today() + datetime.timedelta(semaine*7)
-        start_week = date - datetime.timedelta(date.weekday())
+        start_week = datetime.date.today()  
         end_week = start_week + datetime.timedelta(6)
         entries = Creneau.objects.filter(date__range=[start_week, end_week]).order_by('cours__heure')
         creneaux_dict = {}
+        self.week_days = []
+        jours = []
+        for n in range(int((end_week - start_week).days) + 1):
+             day = start_week + datetime.timedelta(n)
+             self.week_days.append(day)
+             jours.append(day.strftime('%a').upper())
+
         for entry in entries:
             if entry.cours.heure not in creneaux_dict.keys():
                 creneaux_dict[entry.cours.heure] = {}
-                for jour in Cours._meta.get_field('jour').choices:
-                    creneaux_dict[entry.cours.heure][jour[0]] = None
+                for jour in jours:
+                    creneaux_dict[entry.cours.heure][jour] = None
                 creneaux_dict[entry.cours.heure][entry.cours.jour] = entry
             else:
                 creneaux_dict[entry.cours.heure][entry.cours.jour] = entry
-
         return creneaux_dict
 
     def get_context_data(self, **kwargs):
         context = super(CreneauView, self).get_context_data(**kwargs)
-        context['week_days'] = Cours._meta.get_field('jour').choices
-        semaine = self.kwargs['semaine']
-        context['semaine'] = semaine
-        date = datetime.date.today() + datetime.timedelta(semaine*7)
-        context['start_week'] = date - datetime.timedelta(date.weekday())
-        context['end_week'] = context['start_week'] + datetime.timedelta(6)
+        context['week_days'] = self.week_days
+        reservations = Reservation.objects.filter(user=self.request.user)
+        context['creneaux_occuped'] = []
+        context['creneaux_en_attente'] = []
+        for resa in reservations:
+            if resa.is_en_attente():
+                context['creneaux_en_attente'].append(resa.creneau)
+            else:
+                context['creneaux_occuped'].append(resa.creneau)
         return context
 
 
@@ -76,8 +66,97 @@ class ReservationView(LoginRequiredMixin, generic.DetailView):
     template_name = "reservations/resa.html"
     model = Creneau
 
-
+# TODO: Remplacer par vue générique
 def reserver_cours(request, creneau_id):
+    user = request.user
     creneau = Creneau.objects.get(pk=creneau_id)
-    reservation = Reservation.objects.create(creneau=creneau, user=request.user)
-    return render(request, "reservations/resa.html", {})
+    
+    print(creneau.get_places_libres())
+    if creneau.get_places_libres() == 0:
+        creneau.en_attente += 1
+        creneau.save()
+        reservation = Reservation.objects.create(creneau=creneau, user=user,
+                                                 en_attente=creneau.en_attente)
+    else:
+        creneau.reservations += 1
+        creneau.save()
+        reservation = Reservation.objects.create(creneau=creneau, user=user)
+        user.credit -= 1
+        user.save()
+    
+    return redirect('/creneaux')
+
+
+class UserAccountView(LoginRequiredMixin, generic.ListView):
+    template_name = "reservations/user_account.html"
+    context_object_name = 'reservations_list'
+    model = Reservation
+
+    def get_queryset(self):
+        return Reservation.objects.filter(user=self.request.user)
+
+
+class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
+    template_name = "reservations/suppr_reservation.html"
+    context_object_name = 'reservation'
+    model = Reservation
+    success_url = reverse_lazy("user_account")
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        creneau = self.object.creneau
+        all_resa = Reservation.objects.all()
+        for res in all_resa:
+            if res.en_attente > self.object.en_attente:
+                res.en_attente -= 1
+                res.save()
+                if res.en_attente == 0:
+                    res.user.credit -= 1
+                    res.user.save()
+
+        if self.object.is_en_attente():
+            creneau.en_attente -= 1
+            creneau.save()
+        else:
+            if creneau.en_attente == 0:
+                creneau.reservations -= 1
+                creneau.save()
+            elif creneau.en_attente > 0:
+                creneau.en_attente -= 1
+                creneau.save()
+        self.object.delete()
+        request.user.credit += 1
+        request.user.save()
+        return HttpResponseRedirect(success_url)
+
+
+class GenerationCreneau(LoginRequiredMixin, generic.CreateView):
+    template_name = "reservations/generation_creneau.html"
+    form_class = AutoCreneauForm
+    model = Creneau
+    success_url = reverse_lazy("user_account") 
+
+    def perdelta(self, start, end, delta):
+        curr = start
+        while curr < end:
+            yield curr
+            curr += delta
+
+    def form_valid(self, form):
+        cours = Cours.objects.all()
+        days = [ x for x in self.perdelta(timezone.now(), form.cleaned_data['date'],
+                datetime.timedelta(days=1))]
+        for day in days:
+            for cour in cours:
+                if cour.jour == day.strftime("%a").upper():
+                    date = day
+                    new_hour = cour.heure
+                    date = date.replace(hour=int(new_hour.strftime('%H')),
+                                        minute=0, second=0)
+                    Creneau.objects.create(
+                        date=date,
+                        cours=cour
+                    )
+        return HttpResponseRedirect(self.success_url)   
+

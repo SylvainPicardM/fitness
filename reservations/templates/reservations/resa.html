@@ -1,9 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-fluid">
-    <h1>{{ creneau.cours.nom }} : <small>{{ creneau.date }} à {{ creneau.cours.heure }}h </small></h1>
-    <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
-    <p>Mon nombre de séances restantes: <b>{{ user.credit }}</b></p>
-    <a href="{% url 'reserver' creneau.id %}">RESERVER</a>
+<div id="info_resa" class="container-fluid row p-2 m-2">
+    <div id="resa" class="col-8 p-3">
+        <h1>{{ creneau.cours.nom }} : <small>{{ creneau.date }} à {{ creneau.cours.heure }}h </small></h1>
+        <p>Mon nombre de séances restantes: <b>{{ user.credit }}</b></p>
+        {% if creneau.get_places_libres == 0 %}
+            <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
+            <a href="{% url 'reserver' creneau.id %}" class="btn btn-warning">S'INSCRIRE EN LISTE D'ATTENTE</a>
+        {% else %}
+            <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
+            <a href="{% url 'reserver' creneau.id %}" class="btn btn-info">RESERVER</a>
+        {% endif %}
+    </div>
 </div>
+<style>
+    #info_resa{
+        justify-content: center;
+    }
+    #resa{
+        background: #EEE;
+        border-radius: 0.2rem;
+        -webkit-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
+        -moz-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
+        box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
+    }
+</style>
 {% endblock %}

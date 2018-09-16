@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="espace_perso" class="container-fluid my-5 row">
+    {% if user.is_superuser %}
+        <div class="col-12">
+            <h3><a href="{% url 'generer_creneau' %}" class="btn btn-primary">GENERER COURS</a></h3>
+            <hr>
+        </div>
+    {% endif %}
+    <div class="col-12">
+        <h3>MES RESERVATIONS <a class="btn btn-info btn-sm" href="{% url 'creneaux' %}">VOIR LE PLANNING</a></h3>
+    </div>
+    {% for resa in reservations_list %}
+        {% if resa.creneau.is_reservable %}
+            {% if resa.en_attente %}
+                <div class="resa resa_attente col-6 p-2 m-2">
+                    <h3>
+                        {{ resa.creneau.date }} - {{ resa.creneau.cours.nom }}
+                    </h3>
+                    <p>
+                        N° {{resa.en_attente }} en liste d'attente
+                        {% if resa.is_annulable %}
+                            <a class="btn btn-danger btn-sm" href="{% url 'supprimer_resa' resa.id %}">ANNULER</a>
+                        {% endif %}
+                    </p>
+                </div>
+            {% else %}
+                <div class="resa col-6 p-2 m-2">
+                    <h3>
+                        {{ resa.creneau.date }} - {{ resa.creneau.cours.nom }}
+                        {% if resa.is_annulable %}
+                            <a class="btn btn-danger btn-sm" href="{% url 'supprimer_resa' resa.id %}">ANNULER</a>
+                        {% endif %}
+                    </h3>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+<style>
+    #espace_perso h3, #espace_perso p{
+        text-align: center;
+    }
+    #espace_perso{
+        justify-content: center;
+    }
+    .resa{
+        background-color: #EEEEEE;
+        border-radius: 0.2rem;
+        -webkit-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
+        -moz-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
+        box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
+    }
+    .resa_attente{
+        background-color: lightsalmon;
+    }
+</style>
+{% endblock%}

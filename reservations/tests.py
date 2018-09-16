@@ -44,16 +44,16 @@ class CreneauTest(TestCase):
         response = self.client.get('/0/creneaux/')
         self.assertEqual(response.status_code, 200)
 
-    def test_reservation(self):
-            User = get_user_model()
-            self.client.login(username='temporary', password='temporary')
-            date = datetime.date.today()
-            lundi = date - datetime.timedelta(date.weekday())
-            create_creneau(9, lundi, "LUNDI")
-            response = self.client.get('/1/reserver')
-            reservations = Reservation.objects.all()
-            self.assertEqual(response.status_code, 200)            
-            self.assertQuerysetEqual(reservations, ['<Reservation: Reservation object (1)>'])
+    # def test_reservation(self):
+    #         User = get_user_model()
+    #         self.client.login(username='temporary', password='temporary')
+    #         date = datetime.date.today()
+    #         lundi = date - datetime.timedelta(date.weekday())
+    #         create_creneau(9, lundi, "LUNDI")
+    #         response = self.client.get('/1/reserver')
+    #         reservations = Reservation.objects.all()
+    #         self.assertEqual(response.status_code, 200)            
+    #         self.assertQuerysetEqual(reservations, ['<Reservation: Reservation object (1)>'])
 
 
     

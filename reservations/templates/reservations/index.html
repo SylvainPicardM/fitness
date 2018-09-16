@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-    <div id="intro">
-        <h1>INTRO</h1>
-    </div>
     <div class="main_comm">
         <section id="aqua_bike" class="container-fluid row">
             <div class="col-12 py-4">
@@ -11,10 +8,10 @@
             <div class="col-4 py-5 my-5 my_card" id="une_seance">
                 <h2 class="py-3">UNE SEANCE</h2>
                 <ul>
-                    <li>Encadré par un Maire-nageur diplomé</li>
+                    <li>Encadrée par un maître-nageur diplomé</li>
                     <li>Sur une musique rythmée</li>
                     <li>45 minutes</li>
-                    <li>300 à 500 calories depensées</li>
+                    <li>300 à 500 calories dépensées</li>
                     <li>Esprit collectif et dépassement de soi</li>
                 </ul>
             </div>
@@ -29,12 +26,9 @@
                 </ul>
             </div>
         </section>
-        <section id="autres_cours" class="container-fluid">
-            <h1>AUTRES</h1>
-        </section>
         <section id="infos" class="container-fluid row">
                 <div class="col-4 py-5 my-5 my_card" id="tarifs">
-                    <h2 class="py-3">TARIFS</h2>
+                     <h2 class="py-3">TARIFS</h2>
                     <ul>
                         <li>12 euros la séance</li>
                         <li>100 euros les 10 séances</li>
@@ -51,12 +45,31 @@
                     </ul>
                 </div>
             </section>
-        <section id="contact" class="container-fluid">
-            <h1>CONTACT</h1>
+        <section id="autres_cours" class="container-fluid row">
+            <div class="col-12 py-4">
+                <h1>AUTRES ACTIVITES</h1>
+            </div>
+            <div class="col-8 py-5 my-5 my_card" id="autres">
+                <ul>
+                    <li>Leçons de natation</li>
+                    <li>Perfectionnement</li>
+                    <li>Aquaphobie</li>
+                    <li>Bébés nageurs</li>
+                    <li>Aqua-anniversaire</li>
+                    <li>Cours d'aqua gym</li>
+                </ul>
+            </div>
         </section>
     </div>
     <div id="footer">
-        <h1>FOOTER</h1>
+        <h1>CONTACT</h1>
+        <br>
+        <ul>
+            <li>Alexis Pons</li>
+            <li>06 15 57 20 76</li>
+            <li>alexispons5@hotmail.fr</li>
+            <li>Route du plan d'eau, 31310 Rieux Volvestre</li>
+        </ul>
     </div>
     <style>
         h1{
@@ -103,5 +116,13 @@
         #benefices, #horaires{
             background-color: #084E56;
         }
+        #autres{
+            background-color: #DDDDDD;
+            color: black;
+        }
+        #autres li, #footer li{
+            list-style: none;
+            text-align: center;
+          }
     </style>
 {% endblock %}

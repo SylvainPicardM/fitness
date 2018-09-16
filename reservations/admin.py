@@ -12,8 +12,9 @@ class CoursAdmin(admin.ModelAdmin):
 
 @admin.register(Creneau)
 class CreneauAdmin(admin.ModelAdmin):
-    list_display = ('date', 'reservations', 'reservations_max', 'cours')
+    list_display = ('date', 'reservations', 'reservations_max','en_attente',
+                    'cours')
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('creneau', 'user')
+    list_display = ('creneau', 'user', 'en_attente')

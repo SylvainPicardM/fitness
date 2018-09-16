@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-lg">
-	<a class="navbar-brand" href="{% url 'index' %}">TITRE</a>
+	<a class="navbar-brand" href="{% url 'index' %}">AQUA BIKE RIEUX-VOLVESTRE</a>
   	<ul class="navbar-nav ml-auto">
 		{% if user.is_authenticated %}
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				BONJOUR {{user.username|upper }}
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="#">MON COMPTE</a>
-				<a class="dropdown-item" href="{% url 'creneaux' 0 %}">RESERVER</a>
+				<a class="dropdown-item" href="{% url 'user_account' %}">MON COMPTE</a>
+				<a class="dropdown-item" href="{% url 'creneaux' %}">RESERVER</a>
 				{% if user.is_superuser %}
 				<a class="dropdown-item" href="/admin">ADMIN</a>
 				{% endif %}
@@ -23,8 +23,8 @@
   	</ul>
   	<style>
     	.navbar{
-        	margin-bottom: 1em;
-            background-color: #30AFCF;
+        	/*margin-bottom: 1em;*/
+            background-color: #2586AA;
         }
         .navbar-nav {
             flex-direction: row;
@@ -38,7 +38,7 @@
 			color: white;
 		}
 		a:hover{
-			color: #3060CF;
+			color: white;
 		}
     </style>
 </nav>
