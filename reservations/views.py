@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 import locale
+from collections import OrderedDict
 locale.setlocale(locale.LC_TIME, '')
 
 class IndexView(generic.TemplateView):
@@ -29,8 +30,10 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         start_week = datetime.date.today()  
         end_week = start_week + datetime.timedelta(6)
-        entries = Creneau.objects.filter(date__range=[start_week, end_week]).order_by('cours__heure')
-        creneaux_dict = {}
+        end_week_req = start_week + datetime.timedelta(7)
+
+        entries = Creneau.objects.filter(date__range=[start_week, end_week_req]).order_by('cours__heure')
+        creneaux_dict = OrderedDict()
         self.week_days = []
         jours = []
         for n in range(int((end_week - start_week).days) + 1):
@@ -43,6 +46,7 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
                 creneaux_dict[entry.cours.heure] = {}
                 for jour in jours:
                     creneaux_dict[entry.cours.heure][jour] = None
+                print(creneaux_dict)
                 creneaux_dict[entry.cours.heure][entry.cours.jour] = entry
             else:
                 creneaux_dict[entry.cours.heure][entry.cours.jour] = entry
