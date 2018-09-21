@@ -154,16 +154,28 @@ class GenerationCreneau(LoginRequiredMixin, generic.CreateView):
         cours = Cours.objects.all()
         days = [ x for x in self.perdelta(timezone.now(), form.cleaned_data['date'],
                 datetime.timedelta(days=1))]
+        day_dict= {
+            "DIM": 0,
+            "LUN": 1,
+            "MAR": 2,
+            "MER": 3,
+            "JEU": 4,
+            "VEN": 5,
+            "SAM": 6,
+        }
         for day in days:
             for cour in cours:
-                if cour.jour == day.strftime("%a").upper():
+                if int(day_dict[cour.jour]) == int(day.strftime("%w")):
                     date = day
                     new_hour = cour.heure
                     date = date.replace(hour=int(new_hour.strftime('%H')),
                                         minute=0, second=0)
-                    Creneau.objects.create(
-                        date=date,
-                        cours=cour
+
+                    obj, created = Creneau.objects.get_or_create(
+                        cours=cour,
+                        defaults={
+                            'date': date
+                        }
                     )
         return HttpResponseRedirect(self.success_url)   
 
