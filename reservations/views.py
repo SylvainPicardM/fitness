@@ -38,18 +38,21 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
         jours = []
         for n in range(int((end_week - start_week).days) + 1):
              day = start_week + datetime.timedelta(n)
-             self.week_days.append(day)
-             jours.append(day.strftime('%a').upper())
+             day_name = day.strftime('%A')
+             day_num = day.strftime('%d')
+             month_name = day.strftime('%b')
+             day_str = "{} {} {}".format(day_name, day_num, month_name)
+             self.week_days.append(day_str)
+             jours.append(day.strftime('%w').upper())
 
         for entry in entries:
             if entry.cours.heure not in creneaux_dict.keys():
-                creneaux_dict[entry.cours.heure] = {}
+                creneaux_dict[entry.cours.heure] = OrderedDict()
                 for jour in jours:
-                    creneaux_dict[entry.cours.heure][jour] = None
-                print(creneaux_dict)
-                creneaux_dict[entry.cours.heure][entry.cours.jour] = entry
+                    creneaux_dict[entry.cours.heure][str(jour)] = None
+                creneaux_dict[entry.cours.heure][entry.date.strftime('%w')] = entry
             else:
-                creneaux_dict[entry.cours.heure][entry.cours.jour] = entry
+                creneaux_dict[entry.cours.heure][entry.date.strftime('%w')] = entry
         return creneaux_dict
 
     def get_context_data(self, **kwargs):
