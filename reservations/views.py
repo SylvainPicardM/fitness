@@ -132,9 +132,10 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
             elif creneau.en_attente > 0:
                 creneau.en_attente -= 1
                 creneau.save()
+            request.user.credit += 1
+            request.user.save()
+       
         self.object.delete()
-        request.user.credit += 1
-        request.user.save()
         return HttpResponseRedirect(success_url)
 
 
