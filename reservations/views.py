@@ -78,7 +78,6 @@ def reserver_cours(request, creneau_id):
     user = request.user
     creneau = Creneau.objects.get(pk=creneau_id)
     
-    print(creneau.get_places_libres())
     if creneau.get_places_libres() == 0:
         creneau.en_attente += 1
         creneau.save()
@@ -109,11 +108,8 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
     model = Reservation
     success_url = reverse_lazy("user_account")
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-        creneau = self.object.creneau
-        all_resa = Reservation.objects.all()
+    def move_queue(self, creneau):
+        all_resa = Reservation.objects.filter(creneau=creneau)
         for res in all_resa:
             if res.en_attente > self.object.en_attente:
                 res.en_attente -= 1
@@ -121,6 +117,19 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
                 if res.en_attente == 0:
                     res.user.credit -= 1
                     res.user.save()
+                if res.user.credit == 0:
+                    user_resa = Reservation.objects.filter(user=res.user)
+                    for ur in user_resa:
+                        if ur.en_attente > 0:
+                            ur.delete()
+
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        creneau = self.object.creneau
+
+        self.move_queue(creneau)
 
         if self.object.is_en_attente():
             creneau.en_attente -= 1
