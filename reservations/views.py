@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .forms import CustomUserCreationForm, AutoCreneauForm
+from .forms import CustomUserCreationForm
 from .models import MyUser, Creneau, Cours, Reservation
 import datetime
 from django.utils import timezone
@@ -147,45 +147,4 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
-
-class GenerationCreneau(LoginRequiredMixin, generic.CreateView):
-    template_name = "reservations/generation_creneau.html"
-    form_class = AutoCreneauForm
-    model = Creneau
-    success_url = reverse_lazy("user_account") 
-
-    def perdelta(self, start, end, delta):
-        curr = start
-        while curr < end:
-            yield curr
-            curr += delta
-
-    def form_valid(self, form):
-        cours = Cours.objects.all()
-        days = [ x for x in self.perdelta(timezone.now(), form.cleaned_data['date'],
-                datetime.timedelta(days=1))]
-        day_dict= {
-            "DIM": 0,
-            "LUN": 1,
-            "MAR": 2,
-            "MER": 3,
-            "JEU": 4,
-            "VEN": 5,
-            "SAM": 6,
-        }
-        for day in days:
-            for cour in cours:
-                if int(day_dict[cour.jour]) == int(day.strftime("%w")):
-                    date = day
-                    new_hour = cour.heure
-                    date = date.replace(hour=int(new_hour.strftime('%H')),
-                                        minute=0, second=0)
-
-                    obj, created = Creneau.objects.get_or_create(
-                        cours=cour,
-                        defaults={
-                            'date': date
-                        }
-                    )
-        return HttpResponseRedirect(self.success_url)   
 

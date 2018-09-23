@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="espace_perso" class="container-fluid my-5 row">
-    {% if user.is_superuser %}
-        <div class="col-12">
-            <h3><a href="{% url 'generer_creneau' %}" class="btn btn-primary">GENERER COURS</a></h3>
-            <hr>
-        </div>
-    {% endif %}
     <div class="col-12">
         <h3>MES RESERVATIONS <a class="btn btn-info btn-sm" href="{% url 'creneaux' %}">VOIR LE PLANNING</a></h3>
     </div>

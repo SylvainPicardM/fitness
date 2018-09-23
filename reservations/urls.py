@@ -14,6 +14,5 @@ urlpatterns = [
     path('accounts/profile/', views.UserAccountView.as_view(), 
         name="user_account"),
     path('<int:pk>/supprimer_reservation/', views.ReservationDelete.as_view(), 
-        name="supprimer_resa"),
-    path('generer_creneau/', views.GenerationCreneau.as_view(), name="generer_creneau")
-]
+        name="supprimer_resa")
+    ]
