@@ -32,7 +32,7 @@
                                             {{ creneau.cours.nom }} - Liste d'attente
                                         </td>
 			  	                    {% else %}
-				                        {% if creneau.is_reservable and creneau.get_places_libres > 5 %}
+				                        {% if creneau.is_reservable and creneau.get_places_libres >= 5 %}
 				                            <td class="dispo">
                                                 <a href="{% url 'reservations' creneau.id %}">
                                                     {{ creneau.cours.nom }}
