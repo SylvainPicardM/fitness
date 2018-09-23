@@ -17,4 +17,5 @@ class CreneauAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('creneau', 'user', 'en_attente')
+    list_display = ('creneau', 'user', 'en_attente',)
+    list_filter = ('creneau', )
