@@ -28,12 +28,12 @@ class Command(BaseCommand):
                     new_hour = cour.heure
                     date = date.replace(hour=new_hour.hour,
                                         minute=new_hour.minute, 
-                                        second=0)
+                                        second=0,
+                                        microsecond=0)
+                    print(date)
                     obj, created = Creneau.objects.get_or_create(
                         cours=cour,
-                        defaults={
-                            'date': date
-                        }
+                        date=date
                     )
                     if created:
                         print(datetime.now())
