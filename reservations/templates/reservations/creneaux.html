@@ -46,12 +46,16 @@
                                                     </a>
                                                 </td>
                                             {% endif %}
-				                        {% elif creneau.is_reservable and creneau.get_places_libres == 0 %}
-                                            <td class="full">
-                                                <a href="{% url 'reservations' creneau.id %}">
-                                                    {{ creneau.cours.nom }}
-                                                </a>
-                                            </td>
+                                        {% elif creneau.is_reservable and creneau.get_places_libres == 0 %}
+                                            {% if creneau.en_attente < 10 %}
+                                                <td class="full">
+                                                    <a href="{% url 'reservations' creneau.id %}">
+                                                        {{ creneau.cours.nom }}
+                                                    </a>
+                                                </td>
+                                            {% else %}
+                                                <td class="full">Complet</td>
+                                            {% endif %}
                                         {% else %}
                                             <td class="no_cours">
                                                 Cours indisponible
