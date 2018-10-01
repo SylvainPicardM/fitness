@@ -32,14 +32,22 @@
                                             {{ creneau.cours.nom }} - Liste d'attente
                                         </td>
 			  	                    {% else %}
-				                        {% if creneau.is_reservable and creneau.get_places_libres >= 5 %}
-				                            <td class="dispo">
-                                                <a href="{% url 'reservations' creneau.id %}">
-                                                    {{ creneau.cours.nom }}
-                                                </a>
-                                            </td>
-				                        {% elif creneau.is_reservable and creneau.get_places_libres < 5 %}
-                                            <td class="warning">
+                                        {% if creneau.is_reservable and creneau.get_places_libres > 0 %}
+                                            {% if creneau.get_places_libres >= 5 %}
+                                                <td class="dispo">
+                                                    <a href="{% url 'reservations' creneau.id %}">
+                                                        {{ creneau.cours.nom }}
+                                                    </a>
+                                                </td>
+                                            {% else %}
+                                                <td class="warning">
+                                                    <a href="{% url 'reservations' creneau.id %}">
+                                                        {{ creneau.cours.nom }}
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+				                        {% elif creneau.is_reservable and creneau.get_places_libres == 0 %}
+                                            <td class="full">
                                                 <a href="{% url 'reservations' creneau.id %}">
                                                     {{ creneau.cours.nom }}
                                                 </a>
@@ -72,7 +80,7 @@
             color: white;
         }
         .dispo{
-            background-color: lightblue;
+            background-color: #2196f3;
             cursor: pointer;
         }
         .dispo:hover{
@@ -83,17 +91,26 @@
         }
         .reserved{
             font-weight: bold;
-            background-color: lightgreen;
+            background-color: #4caf50;
+            color: #EEEEEE;
         }
         .reserved_attente{
             font-weight: bold;
-            background-color: lightsalmon;
+            background-color: #f44336;
+            color: white;
         }
         .no_cours{
             background-color: #EEEEEE;
         }
         .warning{
-            background-color: lightsalmon;
+            background-color: #ff9800;
+        }
+        .full{
+            background-color: #f44336;
+            color: white;
+        }
+        td a {
+            color: white;
         }
     </style>
 {% endblock %}

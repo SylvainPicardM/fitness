@@ -6,6 +6,7 @@
         <p>Mon nombre de séances restantes: <b>{{ user.credit }}</b></p>
         {% if creneau.get_places_libres == 0 %}
             <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
+            <p>Il y a <b>{{ creneau.en_attente }} personnes </b>en liste d'attente</p>
             <a href="{% url 'reserver' creneau.id %}" class="btn btn-warning">S'INSCRIRE EN LISTE D'ATTENTE</a>
         {% else %}
             <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
