@@ -31,7 +31,6 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
         start_week = datetime.date.today()  
         end_week = start_week + datetime.timedelta(6)
         end_week_req = start_week + datetime.timedelta(7)
-
         entries = Creneau.objects.filter(date__range=[start_week, end_week_req]).order_by('cours__heure')
         creneaux_dict = OrderedDict()
         self.week_days = []
@@ -117,7 +116,7 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
                 if res.en_attente == 0:
                     res.user.credit -= 1
                     res.user.save()
-                if res.user.credit == 0:
+                if res.user.credit == -1:
                     user_resa = Reservation.objects.filter(user=res.user)
                     for ur in user_resa:
                         if ur.en_attente > 0:
@@ -129,21 +128,18 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
         success_url = self.get_success_url()
         creneau = self.object.creneau
 
-        self.move_queue(creneau)
-
-        if self.object.is_en_attente():
+        # Si la resa est en attente et qu'il y a une file d'attente
+        if self.object.is_en_attente() and creneau.en_attente > 0:
             creneau.en_attente -= 1
             creneau.save()
-        else:
-            if creneau.en_attente == 0:
-                creneau.reservations -= 1
-                creneau.save()
-            elif creneau.en_attente > 0:
-                creneau.en_attente -= 1
-                creneau.save()
+        # Si pas en attente et qu'il n'y a personne en file d'attente
+        elif not self.object.is_en_attente() and creneau.en_attente == 0:
+            creneau.reservations -= 1
+            creneau.save()
             request.user.credit += 1
             request.user.save()
        
+        self.move_queue(creneau)
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
