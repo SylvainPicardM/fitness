@@ -21,4 +21,7 @@ class ReservationAdmin(admin.ModelAdmin):
     list_filter = ('creneau', )
 
     def prenom_nom(self, obj):
-        return "{} {}".format(obj.user.prenom, obj.user.nom)
+        
+        p = str(obj.user.prenom).capitalize()
+        n = str(obj.user.nom).upper()
+        return "{} {}".format(p, n)
