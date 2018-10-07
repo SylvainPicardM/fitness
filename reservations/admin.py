@@ -17,5 +17,8 @@ class CreneauAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('creneau', 'user', 'en_attente',)
+    list_display = ('creneau', 'user','get_username', 'en_attente',)
     list_filter = ('creneau', )
+
+    def get_username(self, obj):
+        return "{} {}".format(obj.user.prenom, obj.user.nom)
