@@ -91,15 +91,7 @@ def reserver_cours(request, creneau_id):
             creneau.save()
             reservation = Reservation.objects.create(creneau=creneau, user=user)
             user.credit -= 1
-            user.save()
-
-        send_mail(
-            subject="nouvelle_reservation",
-            message="message",
-            from_email="picard.sylvain3@gmail.com",
-            recipient_list=[user.email],
-            fail_silently=False
-        )   
+            user.save() 
     
     return redirect('/creneaux')
 
