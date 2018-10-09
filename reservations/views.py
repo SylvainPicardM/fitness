@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 locale.setlocale(locale.LC_TIME, '')
+ADMIN_EMAIL = "contact@aquabike-rieuxvolvestre.fr"
 
 class IndexView(generic.TemplateView):
     template_name = 'reservations/index.html'
@@ -83,8 +84,8 @@ def reserver_cours(request, creneau_id):
     creneau = Creneau.objects.get(pk=creneau_id)
 
     # EMAIL SETTINGS
-    from_email="picard.sylvain3@gmail.com"
-    to = ["picard.sylvain3@gmail.com"]
+    from_email=ADMIN_EMAIL
+    to = [user.email]
     date = creneau.date
     date = date.strftime('%A') + " " +date.strftime('%x')
     if user.credit >= 0:
@@ -142,8 +143,8 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
                     res.user.credit -= 1
                     res.user.save()
                     # EMAIL SETTINGS
-                    from_email="picard.sylvain3@gmail.com"
-                    to = ["picard.sylvain3@gmail.com"]
+                    from_email=ADMIN_EMAIL
+                    to = [res.user.email]
                     date = creneau.date
                     date = date.strftime('%A') + " " +date.strftime('%x')
                     subject = "Confirmation inscription du {}".format(date)
