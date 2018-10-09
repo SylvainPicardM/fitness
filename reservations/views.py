@@ -11,6 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 import locale
 from collections import OrderedDict
+from django.core.mail import send_mail
+
 locale.setlocale(locale.LC_TIME, '')
 
 class IndexView(generic.TemplateView):
@@ -72,22 +74,32 @@ class ReservationView(LoginRequiredMixin, generic.DetailView):
     template_name = "reservations/resa.html"
     model = Creneau
 
+
 # TODO: Remplacer par vue générique
 def reserver_cours(request, creneau_id):
     user = request.user
     creneau = Creneau.objects.get(pk=creneau_id)
     
-    if creneau.get_places_libres() == 0:
-        creneau.en_attente += 1
-        creneau.save()
-        reservation = Reservation.objects.create(creneau=creneau, user=user,
-                                                 en_attente=creneau.en_attente)
-    else:
-        creneau.reservations += 1
-        creneau.save()
-        reservation = Reservation.objects.create(creneau=creneau, user=user)
-        user.credit -= 1
-        user.save()
+    if user.credit >= 0:
+        if creneau.get_places_libres() == 0:
+            creneau.en_attente += 1
+            creneau.save()
+            reservation = Reservation.objects.create(creneau=creneau, user=user,
+                                                    en_attente=creneau.en_attente)
+        else:
+            creneau.reservations += 1
+            creneau.save()
+            reservation = Reservation.objects.create(creneau=creneau, user=user)
+            user.credit -= 1
+            user.save()
+
+        send_mail(
+            subject="nouvelle_reservation",
+            message="message",
+            from_email="picard.sylvain3@gmail.com",
+            recipient_list=[user.email],
+            fail_silently=False
+        )   
     
     return redirect('/creneaux')
 
