@@ -12,6 +12,8 @@ from django.http import HttpResponseRedirect
 import locale
 from collections import OrderedDict
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 locale.setlocale(locale.LC_TIME, '')
 
@@ -79,19 +81,38 @@ class ReservationView(LoginRequiredMixin, generic.DetailView):
 def reserver_cours(request, creneau_id):
     user = request.user
     creneau = Creneau.objects.get(pk=creneau_id)
-    
+
+    # EMAIL SETTINGS
+    from_email="picard.sylvain3@gmail.com"
+    to = ["picard.sylvain3@gmail.com"]
+    date = creneau.date
+    date = date.strftime('%A') + " " +date.strftime('%x')
     if user.credit >= 0:
         if creneau.get_places_libres() == 0:
             creneau.en_attente += 1
             creneau.save()
             reservation = Reservation.objects.create(creneau=creneau, user=user,
                                                     en_attente=creneau.en_attente)
+            subject = "Inscription du {} en liste d'attente".format(date)
+            message = "Bonjour {},\nNous vous confirmons que votre inscription "
+            message += "au cours du {} a bien été enregistrée en liste d'attente.\n\n"
+            message += "Cordialement,\nAquabike Rieux-volvestre."
+            message += "\n\nwww.aquabike-rieuxvolvestre.fr"
+            
         else:
             creneau.reservations += 1
             creneau.save()
             reservation = Reservation.objects.create(creneau=creneau, user=user)
             user.credit -= 1
-            user.save() 
+            user.save()
+            subject = "Inscription du {}".format(date)
+            message = "Bonjour {},\nNous vous confirmons que votre inscription "
+            message += "au cours du {} a bien été enregistrée.\n\n"
+            message += "Cordialement,\nAquabike Rieux-volvestre."
+            message += "\n\nwww.aquabike-rieuxvolvestre.fr"
+
+        message = message.format(user.username, date)    
+        send_mail(subject, message, from_email, to)   
     
     return redirect('/creneaux')
 
@@ -120,6 +141,18 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
                 if res.en_attente == 0:
                     res.user.credit -= 1
                     res.user.save()
+                    # EMAIL SETTINGS
+                    from_email="picard.sylvain3@gmail.com"
+                    to = ["picard.sylvain3@gmail.com"]
+                    date = creneau.date
+                    date = date.strftime('%A') + " " +date.strftime('%x')
+                    subject = "Confirmation inscription du {}".format(date)
+                    message = "Bonjour {},\nNous vous confirmons que votre inscription "
+                    message += "au cours du {} a été passée en liste principale.\n\n"
+                    message += "Cordialement,\nAquabike Rieux-volvestre."
+                    message += "\n\nwww.aquabike-rieuxvolvestre.fr"
+                    message = message.format(res.user.username, date)
+                    send_mail(subject, message, from_email, to)  
                 if res.user.credit == -1:
                     user_resa = Reservation.objects.filter(user=res.user)
                     for ur in user_resa:
@@ -131,7 +164,6 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
         creneau = self.object.creneau
-
         # Si la resa est en attente et qu'il y a une file d'attente
         if self.object.is_en_attente() and creneau.en_attente > 0:
             creneau.en_attente -= 1
@@ -147,6 +179,19 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
        
         self.move_queue(creneau)
         self.object.delete()
+
+        # EMAIL SETTINGS
+        from_email="picard.sylvain3@gmail.com"
+        to = ["picard.sylvain3@gmail.com"]
+        date = creneau.date
+        date = date.strftime('%A') + " " +date.strftime('%x')
+        subject = "Annulation inscription du {}".format(date)
+        message = "Bonjour {},\nNous vous confirmons que votre inscription "
+        message += "au cours du {} a bien été annulée.\n\n"
+        message += "Cordialement,\nAquabike Rieux-volvestre."
+        message += "\n\nwww.aquabike-rieuxvolvestre.fr"
+        message = message.format(request.user.username, date)
+        send_mail(subject, message, from_email, to)   
         return HttpResponseRedirect(success_url)
 
 
