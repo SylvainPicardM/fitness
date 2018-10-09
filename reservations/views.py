@@ -132,9 +132,10 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
         if self.object.is_en_attente() and creneau.en_attente > 0:
             creneau.en_attente -= 1
             creneau.save()
-        # Si pas en attente et qu'il n'y a personne en file d'attente
+        # Si pas en attente , on recredite une seance
         elif not self.object.is_en_attente():
-            if and creneau.en_attente == 0:
+            # Si personne en liste d'attente, -1 resa
+            if creneau.en_attente == 0:
                 creneau.reservations -= 1
                 creneau.save()
             request.user.credit += 1
