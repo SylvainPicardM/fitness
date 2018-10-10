@@ -65,6 +65,7 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
         reservations = Reservation.objects.filter(user=self.request.user)
         context['creneaux_occuped'] = []
         context['creneaux_en_attente'] = []
+        context['now'] = timezone.now()
         for resa in reservations:
             if resa.is_en_attente():
                 context['creneaux_en_attente'].append(resa.creneau)
