@@ -57,7 +57,7 @@ class Creneau(models.Model):
         return self.reservations_max - self.reservations
 
     def is_reservable(self):
-        date = self.date + timedelta(minutes=120)
+        date = self.date
         now = timezone.now()
         delta_jour = date.date() - now.date()
         delta_heure = date.hour - now.hour
