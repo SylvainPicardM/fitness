@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-locale.setlocale(locale.LC_TIME, '')
+# locale.setlocale(locale.LC_TIME, '')
 ADMIN_EMAIL = "contact@aquabike-rieuxvolvestre.fr"
 
 class IndexView(generic.TemplateView):
@@ -183,10 +183,10 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
         self.object.delete()
 
         # EMAIL SETTINGS
-        from_email="picard.sylvain3@gmail.com"
-        to = ["picard.sylvain3@gmail.com"]
+        from_email=ADMIN_EMAIL
+        to = [request.user.email]
         date = creneau.date
-        date = date.strftime('%A') + " " +date.strftime('%x')
+        date = date.strftime('%A') + " " + date.strftime('%x')
         subject = "Annulation inscription du {}".format(date)
         message = "Bonjour {},\nNous vous confirmons que votre inscription "
         message += "au cours du {} a bien été annulée.\n\n"
