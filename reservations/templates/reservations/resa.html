@@ -2,7 +2,7 @@
 {% block content %}
 <div id="info_resa" class="container-fluid row p-2 m-2">
     <div id="resa" class="col-8 p-3">
-        <h1>{{ creneau.cours.nom }} : <small>{{ creneau.date }} à {{ creneau.cours.heure }}h </small></h1>
+        <h1>{{ creneau.cours.nom }} : <small>{{ creneau.date }}</small></h1>
         <p>Mon nombre de séances restantes: <b>{{ user.credit }}</b></p>
         {% if creneau.get_places_libres == 0 %}
             <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
