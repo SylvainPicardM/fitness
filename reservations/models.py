@@ -58,20 +58,16 @@ class Creneau(models.Model):
 
     def is_reservable(self):
         date = self.date + timedelta(minutes=120)
-        now = datetime.datetime.now()
-        
+        now = timezone.now()
         delta_jour = date.date() - now.date()
         delta_heure = date.hour - now.hour
 
-        if delta_jour < timedelta(0):
+        if delta_jour < timedelta(days=0):
             return False
-        elif delta_jour == timedelta(0):
-            if delta_heure < 0:
+        elif delta_jour == timedelta(days=0):
+            if delta_heure <= 0:
                 return False
-            else:
-                return True
-        else:
-            return True
+        return True
 
 
 class Reservation(models.Model):
@@ -89,8 +85,7 @@ class Reservation(models.Model):
         creneau = self.creneau
         date = self.creneau.date
         now = timezone.now()
-        print(date - now)
-        delta = date-now
-        if delta < timedelta(0):
+        delta = date - now
+        if delta <= timedelta(days=1):
             return False
         return True
