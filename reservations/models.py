@@ -14,6 +14,12 @@ class MyUser(AbstractUser):
     def __str__(self):
         return self.email
 
+    def get_reservations(self):
+        return Reservation.objects.filter(user=self)
+
+    def nb_resa(self):
+        return self.get_reservations().count()
+
 
 class Cours(models.Model):
     JOUR_DE_LA_SEMAINE = (
