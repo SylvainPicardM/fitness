@@ -18,7 +18,13 @@ class MyUser(AbstractUser):
         return Reservation.objects.filter(user=self)
 
     def nb_resa(self):
-        return self.get_reservations().count()
+        count = 0 
+        reservations = self.get_reservations()
+        day = timezone.now()
+        for res in reservations:
+            if res.creneau.date > day:
+                count += 1
+        return count
 
 
 class Cours(models.Model):

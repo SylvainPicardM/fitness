@@ -7,14 +7,18 @@
         {% if creneau.get_places_libres == 0 %}
             <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
             <p>Il y a <b>{{ creneau.en_attente }} personnes </b>en liste d'attente</p>
-            {% if user.credit >= 0 %}
+            {% if user.nb_resa >= 2 %}
+                <p>Vous avez atteint le nombre de reservations maximum (2)</p>
+            {% elif user.credit >= 0 %}
                 <a href="{% url 'reserver' creneau.id %}" class="btn btn-warning">S'INSCRIRE EN LISTE D'ATTENTE</a>
             {% else %}
                 <p>Vous n'avez plus de credit. Veuillez nous contacter afin de crediter votre compte</p>
             {% endif %}
         {% else %}
             <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
-            {% if user.credit >= 0%}
+            {% if user.nb_resa >= 2 %}
+                <p>Vous avez atteint le nombre de reservations maximum (2)</p>
+            {% elif user.credit >= 0%}
                 <a href="{% url 'reserver' creneau.id %}" class="btn btn-info">RESERVER</a>
             {% else %}
                 <p>Vous n'avez plus de credit. Veuillez nous contacter afin de crediter votre compte</p>
