@@ -1,38 +1,42 @@
 {% extends "base.html" %}
-
 {% block content %}
-
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
-
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
+<section class="hero is-success is-fullheight" id="main_hero">
+<div class="container">
+    <div class="columns">
+        <div id="login_container" class="has-background-info column is-half is-offset-one-quarter">
+            <form id="login_form" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="field">
+                        <label for="" class="label">{{ field.label_tag }}</label>
+                        <div class="control">
+                            {% if field.html_name == "password" %}
+                                <input type="password" class="input" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
+                            {% else %}
+                                <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
+                            {% endif %}
+                        </div>
+                    </div> 
+                {% endfor %}
+                <div class="field">
+                    <div class="control">
+                        <input type="submit" class="button is-primary">
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <a class="button is-text" href="{% url 'signup' %}">Inscription</a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-text" href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+                    </div>
+                </div>
+            </form>
+            {% if form.errors %}
+                <p class=" label label-danger">Votre identifiant ou mot de passe est incorrect.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</section>
 {% endblock %}

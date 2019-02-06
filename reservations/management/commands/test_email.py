@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = "Test envoi de mail via smtp"
 
     def handle(self, *args, **options):
-        from_email="picard.sylvain3@gmail.com"
+        from_email="contact@aquabike-rieuxvolvestre.fr"
         to = ["picard.sylvain3@gmail.com"]
         subject = "Aquabike test email"
         message = "Working email system"

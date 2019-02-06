@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <div class="container">
+        <h1 class="title has-text-centered">AQUABIKE RIEUX-VOLVESTRE</h1>
+        <br>
+        <div class="columns has-text-centered">
+            <div class="column is-one-quarter">
+                <aside class="menu">
+                    <p class="menu-label">Bonjour {{ user.username }}</p>
+                    <p class="menu-label"><b>{{ user.credit }}</b> séances restantes</p>
+                    <ul class="menu-list">
+                        <li><a href="{% url 'creneaux' %}">Reserver</a></li>
+                        <li><a href="{% url 'user_account' %}">Mes séances</a></li>
+                    </ul>
+                    <p class="menu-label">
+                        <a href="{% url 'logout' %}" class="button is-danger is-small">DECONNEXION</a>
+                    </p>
+                </aside>
+            </div>
+            <div class="column">
+                {% block subcontent %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

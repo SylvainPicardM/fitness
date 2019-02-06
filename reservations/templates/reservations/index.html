@@ -1,128 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="main_comm">
-        <section id="aqua_bike" class="container-fluid row">
-            <div class="col-12 py-4">
-                <h1>QU'EST CE QUE L' AQUABIKE ?</h1>
-            </div>
-            <div class="col-4 py-5 my-5 my_card" id="une_seance">
-                <h2 class="py-3">UNE SEANCE</h2>
-                <ul>
-                    <li>Encadrée par un maître-nageur diplomé</li>
-                    <li>Sur une musique rythmée</li>
-                    <li>45 minutes</li>
-                    <li>300 à 500 calories dépensées</li>
-                    <li>Esprit collectif et dépassement de soi</li>
-                </ul>
-            </div>
-            <div class="col-4 offset-1 py-5 my-5 my_card" id="benefices">
-                <h2 class="py-3">LES BENEFICES</h2>
-                <ul>
-                    <li>Gomme la cellulite</li>
-                    <li>Affine la silhouette</li>
-                    <li>Rafermit la peau</li>
-                    <li>Perte de poids</li>
-                    <li>Renforcement musculaire</li>
-                </ul>
-            </div>
-        </section>
-        <section id="infos" class="container-fluid row">
-                <div class="col-4 py-5 my-5 my_card" id="tarifs">
-                     <h2 class="py-3">TARIFS</h2>
-                    <ul>
-                        <li>12 euros la séance</li>
-                        <li>100 euros les 10 séances</li>
-                        <li>160 euros les 20 séances</li>
-                    </ul>
-                </div>
-                <div class="col-4 offset-1 py-5 my-5 my_card" id="horaires">
-                    <h2 class="py-3">HORAIRES</h2>
-                    <ul>
-                        <li>LUNDI 20h15</li>
-                        <li>MERCREDI 19h45</li>
-                        <li>VENDREDI 13h15</li>
-                        <li>SAMEDI 13h15</li>
-                    </ul>
-                </div>
-            </section>
-        <section id="autres_cours" class="container-fluid row">
-            <div class="col-12 py-4">
-                <h1>AUTRES ACTIVITES</h1>
-            </div>
-            <div class="col-8 py-5 my-5 my_card" id="autres">
-                <ul>
-                    <li>Leçons de natation</li>
-                    <li>Perfectionnement</li>
-                    <li>Aquaphobie</li>
-                    <li>Bébés nageurs</li>
-                    <li>Aqua-anniversaire</li>
-                    <li>Cours d'aqua gym</li>
-                </ul>
-            </div>
-        </section>
+<section class="hero is-success is-fullheight" id="main_hero">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title" id="main_title">AQUABIKE RIEUX-VOLVESTRE</h1>
+            <a class="button is-info is-medium" href="{% url 'login' %}">CONNEXION</a>
+        </div>
     </div>
-    <div id="footer">
-        <h1>CONTACT</h1>
-        <br>
-        <ul>
-            <li>Alexis Pons</li>
-            <li>06 15 57 20 76</li>
-            <li>alexispons5@hotmail.fr</li>
-            <li>Route du plan d'eau, 31310 Rieux Volvestre</li>
-        </ul>
+</section>
+<section id="section_info">
+   <div class="container">
+       <div class="columns">
+           <div class="column has-text-centered">
+                <h1 class="title has-text-info">UNE SEANCE</h1>   
+                <div class="content">
+                    <p>Encadrée par un maitre-nageur diplômé</p>
+                    <p>Sur une musique rythmée</p>
+                    <p>Pendant 45 minutes</p>
+                    <p>De 300 à 500 calories dépensées</p>
+                    <p>Dans un esprit collectif et dépassement de soi</p>        
+                </div> 
+           </div>
+           <div class="column has-text-centered">
+                <h1 class="title has-text-info">LES BENEFICES</h1>
+                <div class="content">
+                    <p>Gomme la cellulite</p>
+                    <p>Affine la silhouette</p>
+                    <p>Rafermit la peau</p>
+                    <p>Perte de poids</p>
+                    <p>Renforcement musculaire</p>
+                </div>
+           </div>
+       </div>
+   </div>
+</section>
+<section id="tarifs">
+    <div class="container">
+        <h1 class="title has-text-centered has-text-info">TARIFS</h1>
+        <div class="columns">
+            <div class="column">
+                <div class="box tarif-box has-text-centered">
+                    <h2 class="subtitle">1 SEANCE</h2>
+                    <h1 class="title tarif">10 €</h1>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box tarif-box has-text-centered">
+                    <h2 class="subtitle">10 SEANCES</h2>
+                    <h1 class="title tarif">100 €</h1>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box tarif-box has-text-centered">
+                    <h2 class="subtitle">20 SEANCES</h2>
+                    <h1 class="title tarif">160 €</h1>
+                </div>
+            </div>
+        </div>
     </div>
-    <style>
-        h1{
-            font-weight: bold;
-        }
-        h1, h2 {
-            text-align: center;
-        }
-        ul{
-            /*padding-left: 5rem;*/
-            font-size: 1.5rem;
-        }
-        .main_comm{
-            background-color: #EFF4FA;
-        }
-        .main_comm h1{
-            color: #070F22;
-        }
-        #intro{
-            height: 50rem;
-        }
-        section, .mycard{
-            display: flex;
-            justify-content: center;
-        }
-        section, #footer{
-            padding: 1rem;
-            min-height: 25rem;
-        }
-        #footer{
-            background-color: #2A3A4F; 
-            color: white;
-        }
-        .my_card{
-            color: white;
-            border-radius: .5em;
-            -webkit-box-shadow: 7px 17px 78px -15px rgba(0,0,0,0.75);
-            -moz-box-shadow: 7px 17px 78px -15px rgba(0,0,0,0.75);
-            box-shadow: 7px 17px 78px -15px rgba(0,0,0,0.75);
-        }
-        #une_seance, #tarifs{
-            background-color: #079BB0;
-        }
-        #benefices, #horaires{
-            background-color: #084E56;
-        }
-        #autres{
-            background-color: #DDDDDD;
-            color: black;
-        }
-        #autres li, #footer li{
-            list-style: none;
-            text-align: center;
-          }
-    </style>
+</section>
+<section class="hero is-info" id="inter"></section>
+<section id="autres_activites">
+        <h1 class="title has-text-centered has-text-info">AUTRES ACTIVITES</h1>
+        <div class="content has-text-centered">
+            <h3 class="subtitle is-4">Leçon de natation</h3>
+            <h3 class="subtitle is-4">Perfectionnement</h3>
+            <h3 class="subtitle is-4">Aquaphobie</h3>
+            <h3 class="subtitle is-4">Bébés nageurs</h3>
+            <h3 class="subtitle is-4">Aqua-Anniversaires</h3>
+        </div>
+</section>
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p><b>Alexis PONS</b> maître nageur saveteur.</p>
+        <p><i class="fas fa-phone"></i><b> 06 13 37 20 76</b></p>
+        <p><i class="fas fa-envelope"></i><b> alexispons3@hotmail.fr</b></p>
+    </div>
+</footer>
+
 {% endblock %}

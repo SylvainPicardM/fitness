@@ -1,10 +1,9 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .forms import CustomUserCreationForm
 from .models import MyUser, Creneau, Cours, Reservation
+from .forms import CustomUserCreationForm
 import datetime
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,8 +14,10 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+
 # locale.setlocale(locale.LC_TIME, '')
 ADMIN_EMAIL = "contact@aquabike-rieuxvolvestre.fr"
+
 
 class IndexView(generic.TemplateView):
     template_name = 'reservations/index.html'
@@ -24,7 +25,7 @@ class IndexView(generic.TemplateView):
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
 class CreneauView(LoginRequiredMixin, generic.ListView):
@@ -36,32 +37,11 @@ class CreneauView(LoginRequiredMixin, generic.ListView):
         start_week = datetime.date.today()  
         end_week = start_week + datetime.timedelta(6)
         end_week_req = start_week + datetime.timedelta(7)
-        entries = Creneau.objects.filter(date__range=[start_week, end_week_req]).order_by('cours__heure')
-        creneaux_dict = OrderedDict()
-        self.week_days = []
-        jours = []
-        for n in range(int((end_week - start_week).days) + 1):
-             day = start_week + datetime.timedelta(n)
-             day_name = day.strftime('%A')
-             day_num = day.strftime('%d')
-             month_name = day.strftime('%b')
-             day_str = "{} {} {}".format(day_name, day_num, month_name)
-             self.week_days.append(day_str)
-             jours.append(day.strftime('%w').upper())
-
-        for entry in entries:
-            if entry.cours.heure not in creneaux_dict.keys():
-                creneaux_dict[entry.cours.heure] = OrderedDict()
-                for jour in jours:
-                    creneaux_dict[entry.cours.heure][str(jour)] = None
-                creneaux_dict[entry.cours.heure][entry.date.strftime('%w')] = entry
-            else:
-                creneaux_dict[entry.cours.heure][entry.date.strftime('%w')] = entry
-        return creneaux_dict
+        entries = Creneau.objects.filter(date__range=[start_week, end_week_req])
+        return entries
 
     def get_context_data(self, **kwargs):
         context = super(CreneauView, self).get_context_data(**kwargs)
-        context['week_days'] = self.week_days
         reservations = Reservation.objects.filter(user=self.request.user)
         context['creneaux_occuped'] = []
         context['creneaux_en_attente'] = []

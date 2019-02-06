@@ -1,0 +1,55 @@
+section{
+    padding: 10vh 2vh;;
+}
+
+#main_hero{
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(255, 255, 255, .25)), url('imgs/aqua_rieux2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0
+}   
+
+#main_title{
+    font-size: 5rem;
+}
+@media screen and (max-width:600px){
+    #main_title{
+        font-size: 4rem;
+    }
+}
+
+@media screen and (max-width:450px){
+    #main_title{
+        font-size: 3rem;
+    }
+}
+
+.tarif{
+    font-size: 5rem;
+}
+
+#inter{
+    height: 40vh;
+}
+
+.tarif-box{
+    box-shadow: 0 2px 3px rgba(0,170,255,.1), 0 0 0 1px rgba(11, 131, 187, 0.4)
+}
+
+.tarif-box:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+#autres_activites{
+    background-color: #EBECED;
+}
+
+#login_container{
+    margin-top: 15%;
+    padding: 3vh;
+}
+
+.resa{
+    background-color: lightgrey;
+}

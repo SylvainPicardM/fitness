@@ -1,10 +1,38 @@
 {% extends 'base.html' %}
-
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
+<section class="hero is-success is-fullheight" id="main_hero">
+  <div class="container">
+    <div class="columns">
+        <div id="login_container" class="has-background-info column is-half is-offset-one-quarter">
+            <form id="signup_form" method="post" action="{% url 'signup' %}">
+              {% csrf_token %}
+              {% for field in form %}
+              <div class="field">
+                  <label for="" class="label">{{ field.label_tag }}</label>
+                  <div class="control">
+                      <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
+                  </div>
+              </div> 
+              {% endfor %}
+              <div class="field">
+                  <div class="control">
+                      <input type="submit" class="button is-primary">
+                  </div>
+              </div>
+            </form>
+            {% if form.errors %}
+            <hr>
+              <div class="lform_error">
+                <h1 class="title is-3">Erreurs:</h1>
+                {% for name, error in form.errors.items %}
+                <p class="form_error">
+                  <strong>{{ error | escape }}</strong>
+                </p>
+                {% endfor %}
+              </div>
+            {% endif %}  
+        </div>
+    </div>
+  </div>
+</section>
 {% endblock %}

@@ -7,8 +7,8 @@ from django.utils import timezone
 
 
 class MyUser(AbstractUser):
-    prenom = models.CharField('Prenom', max_length=200, default="Prenom")
-    nom = models.CharField('Nom', max_length=200, default='Nom')
+    prenom = models.CharField('Prenom', max_length=200)
+    nom = models.CharField('Nom', max_length=200)
     credit = models.IntegerField('credits', default=1)
     
     def __str__(self):
@@ -74,12 +74,19 @@ class Creneau(models.Model):
         delta_jour = date.date() - now.date()
         delta_heure = date.hour - now.hour
 
+        if self.en_attente > 9:
+            return False
         if delta_jour < timedelta(days=0):
             return False
         elif delta_jour == timedelta(days=0):
             if delta_heure <= 0:
                 return False
         return True
+
+    # TODO: Recuperer le nombre de personne en liste d'attente depuis les reservations associées
+    # attribut en_attente deviens inutile
+    def get_en_attente(self):
+        pass
 
 
 class Reservation(models.Model):

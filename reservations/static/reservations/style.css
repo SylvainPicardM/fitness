@@ -1,0 +1,514 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+}
+
+.header{
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(255, 255, 255, .25)), url('imgs/aqua_rieux2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+}
+
+.main-title{
+    font-family: 'Permanent Marker', cursive;
+    color: #FFF;
+    font-size: 4em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.button{
+    font-size: 20px;
+    border: 1px solid #FFF;
+    padding: 8px 12px;
+    transition: all .2s ease-in-out;
+    width: fit-content;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.button:hover{
+    background-color: #2586AA;
+    transform: scale(1.2);
+    color: #FFF;
+    border-color: #2586AA;
+}
+
+#down-arrow{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+}
+.main-container{
+    position: absolute;
+    top: 100%;
+    width: 100%;
+}
+.fsection{
+    display: flex;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.fsub{
+    width: 50%;
+    height: 500px;
+    padding: 15px;
+    text-align: center;
+}
+.fsub h1{
+    margin-bottom: 70px;
+    font-weight: bold;
+    font-size: 2.2em;
+}
+.fsub p {
+    font-size: 1.2em;
+}
+#f1{
+    background-color: #2586AA;
+}
+#f2{
+    background-color: #E2E8EA;
+}
+#tarifs{
+    flex-wrap: wrap;
+}
+#tarifs-title, #activites-title{
+    font-family: 'Permanent Marker', cursive;
+    color: #2586AA;
+}
+.card{
+    margin: 70px 30px;
+    height: 400px;
+    width: 300px;
+    border: 2px solid #2586AA;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px 5px 3px rgba(215,215,222,1);
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+.card:hover{
+    transform: scale(1.1);
+}
+
+.card-title h1, .card-title h2{
+    margin: 0;
+}
+.card-title{
+    background-color: #2586AA;
+    padding: 15px;
+    text-align: center;
+    color: #E2E8EA;
+}
+.card-body{
+    font-size: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+#autres_activites{
+    flex-wrap: wrap;
+    padding: 20px;
+    padding-bottom: 60px;
+}
+#activites-title, #tarifs-title{
+    width: 100%;
+    text-align: center;
+    font-size: 1.8rem;
+}
+#activites-descrition{
+    width: 50%;
+    text-align: center;
+    font-size: 1.3rem;
+}
+#activites-photos{
+    width: 50%;
+}
+
+#footer{
+    background-color: #2586AA;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+/* LOGIN ET INSCRIPTION */
+.login-main{
+    display: flex;
+    height: 100%;
+}
+
+.sidebar h1{
+    text-align: center;
+    font-family: 'Permanent Marker', cursive;
+    color: #FFF;
+    font-size: 2em;
+}
+
+#connexion-form{
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#connect{
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+#connect:hover{
+    transform: scale(1.1);
+}
+
+#connexion-form input{
+    padding: 10px;
+    width: 250px;
+    margin: 5px;
+    border: #FFF;
+}
+
+/* LOGIN */
+.lform_container{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(255, 255, 255, .25)), url('imgs/aqua_rieux2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #FFF;
+}
+
+#login_form{
+    background-color: #2586AA;
+    width: 50%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#login_table{
+    width: 90%;
+    padding: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="submit"]{
+    border: none;
+    padding: 7px;
+    width: 80%;
+    margin: 3px 0;
+}
+
+input[type="submit"]{
+    cursor: pointer;
+}
+
+#login_form a {
+    text-decoration: none;
+    color: #FFF;
+    padding: 5px;
+    cursor: pointer;
+}
+
+#login_form a:hover{
+    color:black;
+}
+
+/* SIGNUP */
+#signup_form,
+#password_reset_form{
+    background-color: #2586AA;
+    width: 50%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.lform_error{
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #2586AA;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#password_reset_form{
+    
+}
+
+/* ESPACE USER */
+
+.container{
+    display: flex;
+    height: 100%;
+    background-color: #E2E8EA;
+}
+
+.sidebar{
+    background-color: #2586AA;
+    width: 30%;
+    height: 100%;
+}
+
+.sidebar p {
+    text-align: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.sidebar p a {
+    text-decoration: none;
+    color: #FFF;
+}
+
+.sidebar p a:hover {
+    color: black;
+}
+
+#a_deconnexion{
+    margin-top: 300px;
+}
+
+.content{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    padding-top: 50px;
+}
+
+.resa, .cours{
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 5px 50px;
+    min-width: 500px;
+    background-color: #2586AA;
+    color: white;
+    box-shadow:  5px 5px 5px 0px rgba(0,0,0,0.3);
+}
+
+.resa:hover, .cours:hover{
+    transform: scale(1.1);
+}
+
+.resa a , .cours a{
+    text-decoration: none;
+    color: white;
+}
+
+.btn{
+    font-size: .85rem;
+    padding: 8px;
+    border-radius: 3px;
+    margin: 5px;
+    color: white;
+    text-decoration: none;
+}
+.btn-danger{
+    background-color: #f44336;
+}
+.btn-danger:hover{
+    background-color: #ba000d;
+}
+
+.btn-info{
+    background-color: #2586AA;
+}
+
+.btn-info:hover{
+    background-color: rgb(32, 117, 148);
+}
+
+.cours{
+    padding: 15px 50px;
+}
+
+.cours-inscrit{
+    background-color: #66bb6a;
+}
+
+.cours-en_attente{
+    background-color: #ffa726;
+}
+
+.cours-complet{
+    background-color: #ef5350;
+}
+
+/**
+    RESPONSIVE
+*/
+@media screen and (max-width: 1100px){
+    .main-title{
+        font-size: 2.7em;
+    }
+    .fsub{
+        height: 450px;
+        padding: 15px;
+    }
+    .fsub h1{
+        margin-bottom: 40px;
+        font-size: 2em;
+    }
+    .fsub p {
+        font-size: 1.3em;
+    }
+    #footer{
+        font-size: 1.5em;
+    }
+    .card{
+        margin: 60px 30px;
+        height: 300px;
+        width: 200px;
+    }
+    .card-title{
+        padding: 10px;
+        font-size: 0.8em;
+    }
+    .card-body{
+        font-size: 1.8em;
+    }
+}
+
+@media screen and (max-width: 800px){
+    .main-title{
+        font-size: 2.5em;
+    }
+    .fsection{
+        min-height: 150px;
+    }
+    #description{
+        flex-direction: column;
+    }
+    .fsub{
+        height: 400px;
+        width: 100%;
+        padding: 0;
+    }
+    .fsub h1{
+        margin-bottom: 40px;
+        font-size: 1.8em;
+    }
+    .fsub p {
+        font-size: 1em;
+    }
+    #footer{
+        font-size: 1.15em;
+    }
+    .card{
+        margin: 50px 20px;
+        height: 200px;
+        width: 150px;
+    }
+    .card-title{
+        padding: 10px;
+        font-size: 0.8em;
+    }
+    .card-body{
+        font-size: 1.4em;
+    }
+    #login_form{
+        font-size: .8em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .card{
+        margin: 40px 20px;
+        height: 170px;
+        width: 130px;
+    }
+    .card-title{
+        padding: 10px;
+        font-size: 0.8em;
+    }
+    .card-body{
+        font-size: 1.4em;
+    }
+
+    #login_form{
+        font-size: .7em;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="submit"]{
+        padding: 5px;
+        width: 80%;
+        margin: 2px 0;
+        height: 10px;
+        font-size: .7em;
+        line-height: .5em;
+    }   
+}
+
+@media screen and (max-width: 450px) {
+    #footer{
+        font-size: 1em;
+    }
+    .card{
+        margin: 40px 20px;
+        height: 170px;
+        width: 130px;
+    }
+    .card-title{
+        padding: 8px;
+        font-size: 0.6em;
+    }
+    .card-body{
+        font-size: 1.3em;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .main-title{
+        font-size: 2em;
+    }
+    #footer{
+        font-size: 0.8em;
+    }
+    .card{
+        margin: 30px 15px;
+        height: 150px;
+        width: 115px;
+    }
+    .card-title{
+        padding: 6px;
+        font-size: 0.5em;
+    }
+    .card-body{
+        font-size: 1.3em;
+    }
+}

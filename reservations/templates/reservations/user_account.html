@@ -1,60 +1,24 @@
-{% extends "base.html" %}
-{% block content %}
-<div id="espace_perso" class="container-fluid my-5 row">
-    <div class="col-12">
-        <h3>MES RESERVATIONS <a class="btn btn-info btn-sm" href="{% url 'creneaux' %}">VOIR LE PLANNING</a></h3>
-    </div>
+{% extends "connected.html" %}
+{% block subcontent %}
     {% for resa in reservations_list %}
         {% if resa.creneau.is_reservable %}
             {% if resa.en_attente %}
-                <div class="resa resa_attente col-6 p-2 m-2">
-                    <h3>
-                        {{ resa.creneau.date }} - {{ resa.creneau.cours.nom }}
-                    </h3>
-                    <p>
-                        N° {{resa.en_attente }} en liste d'attente
-                        {% if resa.is_annulable %}
-                            <a class="btn btn-danger btn-sm" href="{% url 'supprimer_resa' resa.id %}">ANNULER</a>
-                        {% else %}
-                            <p class="small-p">Vous ne pouvez pas annuler moins de 24h avant le début du cours.</p>
-                        {% endif %}
-                    </p>
-                </div>
+                <div class="notification is-warning has-text-centered">
             {% else %}
-                <div class="resa col-6 p-2 m-2">
-                    <h3>
-                        {{ resa.creneau.date }} - {{ resa.creneau.cours.nom }}
-                        {% if resa.is_annulable %}
-                            <a class="btn btn-danger btn-sm" href="{% url 'supprimer_resa' resa.id %}">ANNULER</a>
-                        {% else %}
-                            <p class="small-p">Vous ne pouvez pas annuler moins de 24h avant le début du cours.</p>
-                        {% endif %}
-                    </h3>
-                </div>
+                <div class="notification is-info has-text-centered">
             {% endif %}
+                    {% if resa.is_annulable %}
+                        <a class="delete is-medium" href="{% url 'supprimer_resa' resa.id %}"></a>
+                    {% endif %}
+                    <h3 class="subtitle">{{ resa.creneau.date }}</h3>
+                    {% if resa.en_attente %}
+                        <p>N° {{resa.en_attente }} en liste d'attente</p>
+                    {% endif %}
+                </div>
         {% endif %}
+    {% empty %}
+    <div class="notification has-text-centered">
+        Vous n'avez aucune reservation en cours.
+    </div>
     {% endfor %}
-</div>
-<style>
-    #espace_perso h3, #espace_perso p{
-        text-align: center;
-    }
-    #espace_perso{
-        justify-content: center;
-    }
-    .resa{
-        background-color: #EEEEEE;
-        border-radius: 0.2rem;
-        -webkit-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
-        -moz-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
-        box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
-    }
-    .resa_attente{
-        background-color: lightsalmon;
-    }
-    .small-p{
-        color: rgba(0,0,0,0.6);
-        font-size: 12px;
-    }
-</style>
-{% endblock%}
+{% endblock %}

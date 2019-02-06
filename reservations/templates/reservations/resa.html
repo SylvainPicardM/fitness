@@ -1,41 +1,28 @@
-{% extends "base.html" %}
-{% block content %}
-<div id="info_resa" class="container-fluid row p-2 m-2">
-    <div id="resa" class="col-8 p-3">
-        <h1>{{ creneau.cours.nom }} : <small>{{ creneau.date }}</small></h1>
-        <p>Mon nombre de séances restantes: <b>{{ user.credit }}</b></p>
-        {% if creneau.get_places_libres == 0 %}
-            <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
-            <p>Il y a <b>{{ creneau.en_attente }} personnes </b>en liste d'attente</p>
-            {% if user.nb_resa >= 2 %}
-                <p>Vous avez atteint le nombre de reservations maximum (2)</p>
-            {% elif user.credit >= 0 %}
-                <a href="{% url 'reserver' creneau.id %}" class="btn btn-warning">S'INSCRIRE EN LISTE D'ATTENTE</a>
-            {% else %}
-                <p>Vous n'avez plus de credit. Veuillez nous contacter afin de crediter votre compte</p>
-            {% endif %}
+{% extends "connected.html" %}
+{% block subcontent %}
+<div class="notification">
+    <h1 class="title">{{ creneau.date }}</h1>
+    {% if creneau.get_places_libres == 0 %}
+        <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
+        <p>Il y a <b>{{ creneau.en_attente }} personnes </b>en liste d'attente</p>
+        {% if user.nb_resa >= 2 %}
+            <p>Vous avez atteint le nombre de reservations maximum (2)</p>
+        {% elif user.credit >= 0 %}
+            <br>
+            <a href="{% url 'reserver' creneau.id %}" class="button is-primary">S'INSCRIRE EN LISTE D'ATTENTE</a>
         {% else %}
-            <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
-            {% if user.nb_resa >= 2 %}
-                <p>Vous avez atteint le nombre de reservations maximum (2)</p>
-            {% elif user.credit >= 0%}
-                <a href="{% url 'reserver' creneau.id %}" class="btn btn-info">RESERVER</a>
-            {% else %}
-                <p>Vous n'avez plus de credit. Veuillez nous contacter afin de crediter votre compte</p>
-            {% endif %}
+            <p>Vous n'avez plus de credit. Veuillez nous contacter afin de crediter votre compte</p>
         {% endif %}
-    </div>
+    {% else %}
+        <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
+        {% if user.nb_resa >= 2 %}
+            <p>Vous avez atteint le nombre de reservations maximum (2)</p>
+        {% elif user.credit >= 0%}
+            <br>
+            <a href="{% url 'reserver' creneau.id %}" class="button is-primary">RESERVER</a>
+        {% else %}
+            <p>Vous n'avez plus de credit. Veuillez nous contacter afin de crediter votre compte</p>
+        {% endif %}
+    {% endif %}
 </div>
-<style>
-    #info_resa{
-        justify-content: center;
-    }
-    #resa{
-        background: #EEE;
-        border-radius: 0.2rem;
-        -webkit-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
-        -moz-box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
-        box-shadow: 7px 17px 50px -15px rgba(0,0,0,0.75);
-    }
-</style>
 {% endblock %}

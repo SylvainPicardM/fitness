@@ -25,7 +25,10 @@ SECRET_KEY = '*+#q-nvx-lsb&j(ftr_-pfp(b*o5oedu@8hc7*mt4ypq*@gswz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.aquabike-rieuxvolvestre.fr",
+                 "aquabike-rieuxvolvestre.fr",
+                 "localhost",
+                 "192.168.1.20"]
 
 
 # Application definition
@@ -108,13 +111,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr-fr'
 
-TIME_ZONE = 'Etc/UTC'
+# TIME_ZONE = 'Etc/UTC'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -131,3 +135,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'public')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'tmp')
+
+# EMAIL
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'mail.aquabike-rieuxvolvestre.fr'
+# EMAIL_HOST_USER = 'contact@aquabike-rieuxvolvestre.fr'
+# EMAIL_HOST_PASSWORD = 'XYRMaa8w'
+# EMAIL_PORT = 2525
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'picard.sylvain3@gmail.com'
+EMAIL_HOST_PASSWORD = 'XYRMaa8w'
+EMAIL_PORT = 587
+
+LOGOUT_REDIRECT_URL = '/'
