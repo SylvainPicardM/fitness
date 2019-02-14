@@ -15,8 +15,8 @@
                             {% if resa.is_annulable %}
                                 <a class="button is-small is-pulled-right" href="{% url 'supprimer_resa' resa.id %}">ANNULER</a>
                             {% endif %}
-                            {% if resa.en_attente %}
-                                <p>N° {{resa.en_attente }} en liste d'attente</p>
+                            {% if resa.is_en_attente %}
+                                - N° {{ resa.en_attente }} en liste d'attente
                             {% endif %}
                             </div>
                     {% endif %}

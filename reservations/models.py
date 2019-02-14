@@ -88,7 +88,7 @@ class Creneau(models.Model):
         all_resa = Reservation.objects.filter(creneau=self)
         en_attente = 0
         for resa in all_resa:
-            if resa.is_en_attente:
+            if resa.en_attente > 0:
                 en_attente += 1
         return en_attente
 
@@ -102,7 +102,7 @@ class Creneau(models.Model):
             "SAM": "SAMEDI",
             "DIM": "DIMANCHE",
         }
-        date = self.date
+        date = self.date.strftime('%d/%m/%y')
         jour = days[self.cours.jour]
         return "{} - {}".format(jour, date)
 
@@ -126,6 +126,7 @@ class Reservation(models.Model):
         if delta <= timedelta(days=1):
             return False
         return True
+
 
 class Message(models.Model):
     message = models.TextField('message')

@@ -48,8 +48,9 @@ def reserver_cours(request, creneau_id):
         if creneau.get_places_libres() == 0:
             # creneau.en_attente += 1
             # creneau.save()
+            nb_attente = creneau.get_en_attente()
             reservation = Reservation.objects.create(creneau=creneau, user=user,
-                                                    en_attente=creneau.en_attente)
+                en_attente=nb_attente + 1)
             subject = "Inscription du {} en liste d'attente".format(date)
             message = "Bonjour {},\nNous vous confirmons que votre inscription "
             message += "au cours du {} a bien été enregistrée en liste d'attente.\n\n"
