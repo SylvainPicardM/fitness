@@ -3,16 +3,26 @@
 <section>
     <div class="container">
         <h1 class="title has-text-centered">AQUABIKE RIEUX-VOLVESTRE</h1>
-        <br>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="notification has-text-centered">
+                {{message.message}}
+            </div>
+            {% endfor %}
+        {% endif %}
         <div class="columns has-text-centered">
             <div class="column is-one-quarter">
                 <aside class="menu">
                     <p class="menu-label">Bonjour {{ user.username }}</p>
-                    <p class="menu-label"><b>{{ user.credit }}</b> séances restantes</p>
+                    <p class="menu-label">Il vous reste <b>{{ user.credit }}</b> séances</p>
+                    <p class="menu-label">Legende</p>
                     <ul class="menu-list">
-                        <li><a href="{% url 'creneaux' %}">Reserver</a></li>
-                        <li><a href="{% url 'user_account' %}">Mes séances</a></li>
+                        <li class="legend-tag"><span class="tag is-info">Vous pouvez vous inscrire</span></li>
+                        <li class="legend-tag"><span class="tag is-primary">Vous etes inscrit</span></li>
+                        <li class="legend-tag"><span class="tag is-warning">Vous etes en liste d'attente</span></li>
+                        <li class="legend-tag"><span class="tag is-danger">Le cours n'est pas disponible</span></li>
                     </ul>
+                    <hr>
                     <p class="menu-label">
                         <a href="{% url 'logout' %}" class="button is-danger is-small">DECONNEXION</a>
                     </p>
@@ -25,4 +35,15 @@
         </div>
     </div>
 </section>
+<style>
+.menu{
+    padding: 3rem;
+    border: 1px solid lightgray;
+    border-radius: .5rem;
+}
+.legend-tag{
+    margin: .5vh;
+    width: 100px;
+}
+</style>
 {% endblock %}

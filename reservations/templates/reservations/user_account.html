@@ -1,24 +1,58 @@
 {% extends "connected.html" %}
 {% block subcontent %}
-    {% for resa in reservations_list %}
-        {% if resa.creneau.is_reservable %}
-            {% if resa.en_attente %}
-                <div class="notification is-warning has-text-centered">
-            {% else %}
+    <!-- SI il y a des reservations -->
+    {% if reservations_list %}
+        {% for creneau in creneaux %}
+            {% for resa in reservations_list %}
+                {% if resa.creneau == creneau %}
+                    {% if resa.creneau.is_reservable %}
+                        {% if resa.en_attente %}
+                            <div class="notification is-warning has-text-centered">
+                        {% else %}
+                            <div class="notification is-primary has-text-centered">
+                        {% endif %}
+                            {{ creneau.get_name }}
+                            {% if resa.is_annulable %}
+                                <a class="button is-small is-pulled-right" href="{% url 'supprimer_resa' resa.id %}">ANNULER</a>
+                            {% endif %}
+                            {% if resa.en_attente %}
+                                <p>N° {{resa.en_attente }} en liste d'attente</p>
+                            {% endif %}
+                            </div>
+                    {% endif %}
+                {% else %}
+                    {% if creneau.is_reservable and creneau.get_places_libres > 0 %}
+                        <div class="notification is-info has-text-centered">
+                                {{ creneau.get_name }}
+                            <a class="button is-small is-pulled-right" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
+                        </div>
+                    {% elif creneau.is_reservable and creneau.get_places_libres == 0 %}
+                        <div class="notification is-info has-text-centered">
+                            {{ creneau.get_name }}
+                            <a class="button is-small is-pulled-right" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
+                        </div>
+                    {% else %}
+                        <div class="notification is-danger has-text-centered">{{ creneau.date }} : Complet</div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    <!-- Si il n'y a pas de reservations -->
+    {% else %}
+        {% for creneau in creneaux %}
+            {% if creneau.is_reservable and creneau.get_places_libres > 0 %}
                 <div class="notification is-info has-text-centered">
-            {% endif %}
-                    {% if resa.is_annulable %}
-                        <a class="delete is-medium" href="{% url 'supprimer_resa' resa.id %}"></a>
-                    {% endif %}
-                    <h3 class="subtitle">{{ resa.creneau.date }}</h3>
-                    {% if resa.en_attente %}
-                        <p>N° {{resa.en_attente }} en liste d'attente</p>
-                    {% endif %}
+                        {{ creneau.get_name }} - 
+                    <a class="button is-small" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
                 </div>
-        {% endif %}
-    {% empty %}
-    <div class="notification has-text-centered">
-        Vous n'avez aucune reservation en cours.
-    </div>
-    {% endfor %}
+            {% elif creneau.is_reservable and creneau.get_places_libres == 0 %}
+                <div class="notification is-info has-text-centered">
+                    {{ creneau.get_name }} - 
+                    <a class="button is-small" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
+                </div>
+            {% else %}
+                <div class="notification is-danger has-text-centered">{{ creneau.date }} : Complet</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

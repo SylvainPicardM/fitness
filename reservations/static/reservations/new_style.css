@@ -1,5 +1,5 @@
 section{
-    padding: 10vh 2vh;;
+    padding: 10vh 2vh;
 }
 
 #main_hero{
@@ -45,11 +45,30 @@ section{
     background-color: #EBECED;
 }
 
+.centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #login_container{
-    margin-top: 15%;
     padding: 3vh;
 }
 
 .resa{
     background-color: lightgrey;
+}
+
+
+.subtitle{
+    font-weight: bold;
+}
+
+.content{
+    font-weight: bold;
+}
+
+.table td, .table th{
+    text-align: center;
+    padding: 1.2rem;
 }

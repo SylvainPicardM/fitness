@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="hero is-success is-fullheight" id="main_hero">
-<div class="container">
+<div class="container centered">
     <div class="columns">
-        <div id="login_container" class="has-background-info column is-half is-offset-one-quarter">
+        <div id="login_container" class="has-background-info column">
+            <h1 class="title has-text-centered">CONNECTION</h1>
             <form id="login_form" method="post" action="{% url 'login' %}">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="field">
-                        <label for="" class="label">{{ field.label_tag }}</label>
+                        <label for="" class="label is-medium">{{ field.label_tag }}</label>
                         <div class="control">
                             {% if field.html_name == "password" %}
                                 <input type="password" class="input" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
@@ -18,14 +19,14 @@
                         </div>
                     </div> 
                 {% endfor %}
-                <div class="field">
+                <div class="field is-centered">
                     <div class="control">
                         <input type="submit" class="button is-primary">
                     </div>
                 </div>
                 <div class="field is-grouped">
                     <div class="control">
-                        <a class="button is-text" href="{% url 'signup' %}">Inscription</a>
+                        <a class="button is-text" href="{% url 'signup' %}"><b>Inscription</b></a>
                     </div>
                     <div class="control">
                         <a class="button is-text" href="{% url 'password_reset' %}">Mot de passe oublié ?</a>

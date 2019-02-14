@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import MyUser, Creneau, Cours, Reservation
+from .models import MyUser, Creneau, Cours, Reservation, Message
 from .forms import CustomUserCreationForm
 import datetime
 from django.utils import timezone
@@ -28,31 +28,6 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
-class CreneauView(LoginRequiredMixin, generic.ListView):
-    template_name = "reservations/creneaux.html"
-    context_object_name = 'creneaux_list'
-    login_url = '/login/'
-
-    def get_queryset(self):
-        start_week = datetime.date.today()  
-        end_week = start_week + datetime.timedelta(6)
-        end_week_req = start_week + datetime.timedelta(7)
-        entries = Creneau.objects.filter(date__range=[start_week, end_week_req])
-        return entries
-
-    def get_context_data(self, **kwargs):
-        context = super(CreneauView, self).get_context_data(**kwargs)
-        reservations = Reservation.objects.filter(user=self.request.user)
-        context['creneaux_occuped'] = []
-        context['creneaux_en_attente'] = []
-        context['now'] = timezone.now()
-        for resa in reservations:
-            if resa.is_en_attente():
-                context['creneaux_en_attente'].append(resa.creneau)
-            else:
-                context['creneaux_occuped'].append(resa.creneau)
-        return context
-
 
 class ReservationView(LoginRequiredMixin, generic.DetailView):
     template_name = "reservations/resa.html"
@@ -71,8 +46,8 @@ def reserver_cours(request, creneau_id):
     date = date.strftime('%A') + " " +date.strftime('%x')
     if user.credit >= 0:
         if creneau.get_places_libres() == 0:
-            creneau.en_attente += 1
-            creneau.save()
+            # creneau.en_attente += 1
+            # creneau.save()
             reservation = Reservation.objects.create(creneau=creneau, user=user,
                                                     en_attente=creneau.en_attente)
             subject = "Inscription du {} en liste d'attente".format(date)
@@ -96,7 +71,7 @@ def reserver_cours(request, creneau_id):
         message = message.format(user.username, date)    
         send_mail(subject, message, from_email, to)   
     
-    return redirect('/creneaux')
+    return redirect('/accounts/profile/')
 
 
 class UserAccountView(LoginRequiredMixin, generic.ListView):
@@ -107,6 +82,24 @@ class UserAccountView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Reservation.objects.filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        # RECUPERATION DES MESSAGES
+        context = super(UserAccountView, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        today = datetime.date.today()  
+        messages = Message.objects.filter(
+            date_debut__lte=today,
+            date_fin__gte=today
+        )
+        context['messages'] = messages
+
+        # RECUPERATION DES CRENEAUX
+        start_week = datetime.date.today()  
+        end_week = start_week + datetime.timedelta(6)
+        end_week_req = start_week + datetime.timedelta(7)
+        context['creneaux'] = Creneau.objects.filter(date__range=[start_week,
+                                                                  end_week_req])
+        return context
 
 class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
     template_name = "reservations/suppr_reservation.html"
@@ -114,15 +107,48 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
     model = Reservation
     success_url = reverse_lazy("user_account")
 
-    def move_queue(self, creneau):
+    # TODO: Revoir algo gestion file, probleme le compteur de personne en attente ne se modifie pas correctement
+    """
+    Quand annulation:
+        Recup toutes les resa en attente du creneau
+        - Si la resa est en attente:
+            - Faire remonter toutes les resa qui etait plus bas dans la file
+        - Sinon:
+            - Faire remonter toutes les resa en attente
+            - Passer la premiere hors de la file d'attente
+            - Si pas de remontee en file principale, -1 au compteur d'inscits au creneay
+    Le compteur de nbre de personne en attente doit etre géré en comptant le nb de resa en attente
+   
+    """
+    
+    def move_queue(self, reservation, creneau, user):
         all_resa = Reservation.objects.filter(creneau=creneau)
-        for res in all_resa:
-            if res.en_attente > self.object.en_attente:
+        resa_en_attente = [r for r in all_resa if r.is_en_attente]
+
+        if reservation.is_en_attente():
+            for res in resa_en_attente:
+                if res.en_attente > reservation.en_attente:
+                    res.en_attente -= 1
+                    res.save()
+        else:
+            creneau.reservations -= 1
+            creneau.save()
+            user.credit += 1
+            user.save()
+            for res in resa_en_attente:
                 res.en_attente -= 1
                 res.save()
                 if res.en_attente == 0:
+                    creneau.reservations += 1
+                    creneau.save()
                     res.user.credit -= 1
                     res.user.save()
+                    if res.user.credit == -1:
+                        user_resa = Reservation.objects.filter(user=res.user)
+                        for ur in user_resa:
+                            if ur.en_attente > 0:
+                                ur.delete()
+
                     # EMAIL SETTINGS
                     from_email=ADMIN_EMAIL
                     to = [res.user.email]
@@ -135,31 +161,16 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
                     message += "\n\nwww.aquabike-rieuxvolvestre.fr"
                     message = message.format(res.user.username, date)
                     send_mail(subject, message, from_email, to)  
-                if res.user.credit == -1:
-                    user_resa = Reservation.objects.filter(user=res.user)
-                    for ur in user_resa:
-                        if ur.en_attente > 0:
-                            ur.delete()
+                
+        # print("NB ATTENTE", creneau.get_en_attente())
 
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
         creneau = self.object.creneau
-        # Si la resa est en attente et qu'il y a une file d'attente
-        if self.object.is_en_attente() and creneau.en_attente > 0:
-            creneau.en_attente -= 1
-            creneau.save()
-        # Si pas en attente , on recredite une seance
-        elif not self.object.is_en_attente():
-            # Si personne en liste d'attente, -1 resa
-            if creneau.en_attente == 0:
-                creneau.reservations -= 1
-                creneau.save()
-            request.user.credit += 1
-            request.user.save()
-       
-        self.move_queue(creneau)
+        user = request.user
+        self.move_queue(self.object, creneau, user)
         self.object.delete()
 
         # EMAIL SETTINGS
@@ -173,7 +184,10 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
         message += "Cordialement,\nAquabike Rieux-volvestre."
         message += "\n\nwww.aquabike-rieuxvolvestre.fr"
         message = message.format(request.user.username, date)
-        send_mail(subject, message, from_email, to)   
+        send_mail(subject, message, from_email, to) 
+
         return HttpResponseRedirect(success_url)
+
+
 
 

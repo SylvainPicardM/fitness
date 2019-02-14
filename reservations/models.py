@@ -74,7 +74,8 @@ class Creneau(models.Model):
         delta_jour = date.date() - now.date()
         delta_heure = date.hour - now.hour
 
-        if self.en_attente > 9:
+        # TODO: Verifier fonctionnement heure sur serveur
+        if self.get_en_attente() > 9:
             return False
         if delta_jour < timedelta(days=0):
             return False
@@ -83,10 +84,27 @@ class Creneau(models.Model):
                 return False
         return True
 
-    # TODO: Recuperer le nombre de personne en liste d'attente depuis les reservations associées
-    # attribut en_attente deviens inutile
     def get_en_attente(self):
-        pass
+        all_resa = Reservation.objects.filter(creneau=self)
+        en_attente = 0
+        for resa in all_resa:
+            if resa.is_en_attente:
+                en_attente += 1
+        return en_attente
+
+    def get_name(self):
+        days = {
+            "LUN": "LUNDI",
+            "MAR": "MARDI",
+            "MER": "MERCREDI",
+            "JEU": "JEUDI",
+            "VEN": "VENDREDI",
+            "SAM": "SAMEDI",
+            "DIM": "DIMANCHE",
+        }
+        date = self.date
+        jour = days[self.cours.jour]
+        return "{} - {}".format(jour, date)
 
 
 class Reservation(models.Model):
@@ -108,3 +126,8 @@ class Reservation(models.Model):
         if delta <= timedelta(days=1):
             return False
         return True
+
+class Message(models.Model):
+    message = models.TextField('message')
+    date_debut = models.DateField('date_debut')
+    date_fin = models.DateField('date_fin')

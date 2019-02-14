@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import MyUser, Cours, Creneau, Reservation
+from .models import MyUser, Cours, Creneau, Reservation, Message
 
 @admin.register(MyUser)
 class MyUserAdmin(admin.ModelAdmin):
@@ -25,3 +25,5 @@ class ReservationAdmin(admin.ModelAdmin):
         p = str(obj.user.prenom).capitalize()
         n = str(obj.user.nom).upper()
         return "{} {}".format(p, n)
+
+admin.site.register(Message)

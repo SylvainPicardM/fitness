@@ -4,7 +4,7 @@
     <h1 class="title">{{ creneau.date }}</h1>
     {% if creneau.get_places_libres == 0 %}
         <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
-        <p>Il y a <b>{{ creneau.en_attente }} personnes </b>en liste d'attente</p>
+        <p>Il y a <b>{{ creneau.get_en_attente }} personnes </b>en liste d'attente</p>
         {% if user.nb_resa >= 2 %}
             <p>Vous avez atteint le nombre de reservations maximum (2)</p>
         {% elif user.credit >= 0 %}

@@ -6,8 +6,6 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     path('', views.IndexView.as_view(), name='index'),
     path('signup/', views.SignUp.as_view(), name='signup'),
-    path('creneaux/', views.CreneauView.as_view(), 
-        name='creneaux'),
     path('<int:pk>/reservations', views.ReservationView.as_view(), 
         name="reservations"),
     path('<int:creneau_id>/reserver', views.reserver_cours, name="reserver"),
