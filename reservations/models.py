@@ -104,7 +104,9 @@ class Creneau(models.Model):
         }
         date = self.date.strftime('%d/%m/%y')
         jour = days[self.cours.jour]
-        return "{} - {}".format(jour, date)
+        heure = self.date.strftime('%H')
+        minute = self.date.strftime('%M')
+        return "{} - {} - {}:{}".format(jour, date, heure, minute)
 
     def get_user_resa(self, user):
         all_resa = Reservation.objects.filter(creneau=self)
@@ -119,6 +121,9 @@ class Reservation(models.Model):
     creneau = models.ForeignKey(Creneau, on_delete=models.CASCADE)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     en_attente = models.IntegerField("en_attente", default=0)
+
+    class Meta:
+        unique_together = ('creneau', 'user',)
 
     def is_en_attente(self):
         if self.en_attente > 0:

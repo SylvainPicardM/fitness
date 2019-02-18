@@ -44,10 +44,13 @@ def reserver_cours(request, creneau_id):
     to = [user.email]
     date = creneau.date
     date = date.strftime('%A') + " " +date.strftime('%x')
+
+    test_res = Reservation.objects.filter(creneau=creneau, user=user).count()
+    if test_res != 0:
+        return redirect('/accounts/profile/')        
+
     if user.credit >= 0:
         if creneau.get_places_libres() == 0:
-            # creneau.en_attente += 1
-            # creneau.save()
             nb_attente = creneau.get_en_attente()
             reservation = Reservation.objects.create(creneau=creneau, user=user,
                 en_attente=nb_attente + 1)
