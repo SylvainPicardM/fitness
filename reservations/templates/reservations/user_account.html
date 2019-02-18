@@ -26,7 +26,7 @@
                     <a class="button is-small is-pulled-right" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
                 </div>
             {% elif creneau.is_reservable and creneau.get_places_libres == 0 %}
-                <div class="notification is-info has-text-centered">
+                <div class="notification is-warning has-text-centered">
                     {{ creneau.get_name }}
                     <a class="button is-small is-pulled-right" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
                 </div>
