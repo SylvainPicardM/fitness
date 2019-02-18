@@ -106,6 +106,14 @@ class Creneau(models.Model):
         jour = days[self.cours.jour]
         return "{} - {}".format(jour, date)
 
+    def get_user_resa(self, user):
+        all_resa = Reservation.objects.filter(creneau=self)
+        for res in all_resa:
+            if res.user == user:
+                return res
+        return None
+
+
 
 class Reservation(models.Model):
     creneau = models.ForeignKey(Creneau, on_delete=models.CASCADE)

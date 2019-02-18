@@ -81,7 +81,12 @@ class UserAccountView(LoginRequiredMixin, generic.ListView):
     model = Reservation
 
     def get_queryset(self):
-        return Reservation.objects.filter(user=self.request.user)
+        all_res = Reservation.objects.filter(user=self.request.user)
+        reservations = []
+        for r in all_res:
+            if r.creneau.is_reservable():
+                reservations.append(r)
+        return reservations
 
     def get_context_data(self, **kwargs):
         # RECUPERATION DES MESSAGES
@@ -98,8 +103,13 @@ class UserAccountView(LoginRequiredMixin, generic.ListView):
         start_week = datetime.date.today()  
         end_week = start_week + datetime.timedelta(6)
         end_week_req = start_week + datetime.timedelta(7)
-        context['creneaux'] = Creneau.objects.filter(date__range=[start_week,
-                                                                  end_week_req])
+        creneaux = Creneau.objects.filter(date__range=[start_week, end_week_req])
+        
+        for creneau in creneaux:
+            res = creneau.get_user_resa(self.request.user)
+            creneau.user_res = res
+
+        context['creneaux'] = creneaux                                                
         return context
 
 class ReservationDelete(LoginRequiredMixin, generic.DeleteView):

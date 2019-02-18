@@ -23,6 +23,11 @@
                         <li class="legend-tag"><span class="tag is-danger">Le cours n'est pas disponible</span></li>
                     </ul>
                     <hr>
+                    {% if user.is_superuser %}
+                        <p class="menu-label">
+                            <a href="/admin/" class="button is-info is-small">ADMIN</a>
+                        </p>
+                    {% endif %}
                     <p class="menu-label">
                         <a href="{% url 'logout' %}" class="button is-danger is-small">DECONNEXION</a>
                     </p>
