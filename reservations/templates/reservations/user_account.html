@@ -4,7 +4,7 @@
         <!-- SI USER A UNE RES SUR LE CRENEAU -->
         {% if creneau.user_res is not None %}
             {% if creneau.is_reservable %}
-                {% if creneau.user_res.en_attente %}
+                {% if creneau.user_res.is_en_attente %}
                     <div class="notification is-warning has-text-centered">
                 {% else %}
                     <div class="notification is-primary has-text-centered">
@@ -31,7 +31,7 @@
                     <a class="button is-small is-pulled-right" href="{% url 'reservations' creneau.id %}">M'INSCRIRE</a>
                 </div>
             {% else %}
-                <div class="notification is-danger has-text-centered">{{ creneau.date }} : Complet</div>
+                <div class="notification is-danger has-text-centered">{{ creneau.get_name }} : Complet</div>
             {% endif %}
         {% endif %}
     {% endfor%}

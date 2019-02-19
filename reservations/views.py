@@ -122,23 +122,10 @@ class ReservationDelete(LoginRequiredMixin, generic.DeleteView):
     model = Reservation
     success_url = reverse_lazy("user_account")
 
-    # TODO: Revoir algo gestion file, probleme le compteur de personne en attente ne se modifie pas correctement
-    """
-    Quand annulation:
-        Recup toutes les resa en attente du creneau
-        - Si la resa est en attente:
-            - Faire remonter toutes les resa qui etait plus bas dans la file
-        - Sinon:
-            - Faire remonter toutes les resa en attente
-            - Passer la premiere hors de la file d'attente
-            - Si pas de remontee en file principale, -1 au compteur d'inscits au creneay
-    Le compteur de nbre de personne en attente doit etre géré en comptant le nb de resa en attente
-   
-    """
     
     def move_queue(self, reservation, creneau, user):
         all_resa = Reservation.objects.filter(creneau=creneau)
-        resa_en_attente = [r for r in all_resa if r.is_en_attente]
+        resa_en_attente = [r for r in all_resa if r.is_en_attente()]
 
         if reservation.is_en_attente():
             for res in resa_en_attente:

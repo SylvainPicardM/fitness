@@ -27,3 +27,4 @@ class ReservationAdmin(admin.ModelAdmin):
         return "{} {}".format(p, n)
 
 admin.site.register(Message)
+admin.site.site_url = "/accounts/profile/"
