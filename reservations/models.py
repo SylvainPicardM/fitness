@@ -77,6 +77,8 @@ class Creneau(models.Model):
         # TODO: Verifier fonctionnement heure sur serveur
         if self.get_en_attente() > 9:
             return False
+        if self.en_attente == 19:
+            return False
         if delta_jour < timedelta(days=0):
             return False
         elif delta_jour == timedelta(days=0):

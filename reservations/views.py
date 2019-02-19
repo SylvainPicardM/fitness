@@ -106,9 +106,10 @@ class UserAccountView(LoginRequiredMixin, generic.ListView):
         start_week = datetime.date.today()  
         end_week = start_week + datetime.timedelta(6)
         end_week_req = start_week + datetime.timedelta(7)
-        creneaux = Creneau.objects.filter(date__range=[start_week, end_week_req])
+        creneaux = Creneau.objects.filter(date__range=[start_week, end_week_req]).order_by('date')
         
         for creneau in creneaux:
+            print(creneau)
             res = creneau.get_user_resa(self.request.user)
             creneau.user_res = res
 
