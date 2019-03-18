@@ -55,7 +55,7 @@ class Cours(models.Model):
 class Creneau(models.Model):
     date = models.DateTimeField('Date du cours')
     reservations = models.IntegerField('Nombre de reservations', default=0)
-    reservations_max = models.IntegerField('Nb de reservation max', default=19)
+    reservations_max = models.IntegerField('Nb de reservation max', default=25)
     en_attente = models.IntegerField('En attente', default=0)
     cours = models.ForeignKey(Cours, on_delete=models.CASCADE)
 
