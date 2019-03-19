@@ -15,8 +15,8 @@
         {% endif %}
     {% else %}
         <p>Nombre de places disponibles : <strong>{{ creneau.get_places_libres }}</strong></p>
-        {% if user.nb_resa >= 2 %}
-            <p>Vous avez atteint le nombre de reservations maximum (2)</p>
+        {% if user.nb_resa >= 3 %}
+            <p>Vous avez atteint le nombre de reservations simultanées maximum (3)</p>
         {% elif user.credit >= 0%}
             <br>
             <a href="{% url 'reserver' creneau.id %}" class="button is-primary">RESERVER</a>

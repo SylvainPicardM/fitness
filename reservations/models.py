@@ -74,7 +74,6 @@ class Creneau(models.Model):
         delta_jour = date.date() - now.date()
         delta_heure = date.hour - now.hour
 
-        # TODO: Verifier fonctionnement heure sur serveur
         if self.get_en_attente() > 9:
             return False
         if self.en_attente == 19:
@@ -128,19 +127,17 @@ class Reservation(models.Model):
         unique_together = ('creneau', 'user',)
 
     def is_en_attente(self):
-        if self.en_attente > 0:
-            return True
-        else:
-            return False
+        return self.en_attente > 0
         
     def is_annulable(self):
         creneau = self.creneau
         date = self.creneau.date
         now = timezone.now()
         delta = date - now
-        if delta <= timedelta(days=1):
-            return False
-        return True
+        return delta > timedelta(days=1)
+        # if delta <= timedelta(days=1):
+        #     return False
+        # return True
 
 
 class Message(models.Model):
