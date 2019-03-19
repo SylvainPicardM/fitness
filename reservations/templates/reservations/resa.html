@@ -5,8 +5,8 @@
     {% if creneau.get_places_libres == 0 %}
         <p>Cette séance n'a plus de places disponibles. Voulez-vous vous inscrire en liste d'attente ?</p>
         <p>Il y a <b>{{ creneau.get_en_attente }} personnes </b>en liste d'attente</p>
-        {% if user.nb_resa >= 2 %}
-            <p>Vous avez atteint le nombre de reservations maximum (2)</p>
+        {% if user.nb_resa >= 3 %}
+            <p>Vous avez atteint le nombre de reservations maximum (3)</p>
         {% elif user.credit >= 0 %}
             <br>
             <a href="{% url 'reserver' creneau.id %}" class="button is-primary">S'INSCRIRE EN LISTE D'ATTENTE</a>
