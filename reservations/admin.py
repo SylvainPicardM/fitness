@@ -8,7 +8,7 @@ class MyUserAdmin(admin.ModelAdmin):
 
 @admin.register(Cours)
 class CoursAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'jour', 'heure', 'duree')
+    list_display = ('nom', 'jour', 'heure', 'actif')
 
 @admin.register(Creneau)
 class CreneauAdmin(admin.ModelAdmin):

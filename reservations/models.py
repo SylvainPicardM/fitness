@@ -43,6 +43,7 @@ class Cours(models.Model):
     duree = models.IntegerField('Duree en minutes', default=60)
     jour = models.CharField('Jour de la semaine', max_length=20,
         choices=JOUR_DE_LA_SEMAINE)
+    actif = models.BooleanField('Actif', default=True)
     
     def __str__(self):
         return "{} - {} - {}h".format(self.nom, self.jour, self.heure)

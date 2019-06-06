@@ -23,19 +23,19 @@ class Command(BaseCommand):
         days = [ x for x in self._perdelta(now, until, timedelta(days=1))]
         for day in days:
             for cour in cours:
-                if int(self.day_dict[cour.jour]) == int(day.strftime("%w")):
-                    date = day
-                    new_hour = cour.heure
-                    date = date.replace(hour=new_hour.hour,
-                                        minute=new_hour.minute, 
-                                        second=0,
-                                        microsecond=0)
-                    print(date)
-                    obj, created = Creneau.objects.get_or_create(
-                        cours=cour,
-                        date=date
-                    )
-                    if created:
-                        print(datetime.now())
-                        print("Creneau created")
-                        print(obj)
+                if cour.actif:
+                    if int(self.day_dict[cour.jour]) == int(day.strftime("%w")):
+                        date = day
+                        new_hour = cour.heure
+                        date = date.replace(hour=new_hour.hour,
+                                            minute=new_hour.minute, 
+                                            second=0,
+                                            microsecond=0)
+                        obj, created = Creneau.objects.get_or_create(
+                            cours=cour,
+                            date=date
+                        )
+                        if created:
+                            print(datetime.now())
+                            print("Creneau created")
+                            print(obj)

@@ -1,5 +1,5 @@
 section{
-    padding: 10vh 2vh;
+    padding: 6vh 2vh;
 }
 
 #main_hero{
@@ -12,6 +12,27 @@ section{
 #main_title{
     font-size: 5rem;
 }
+
+.show-mobile{
+    display: none;
+}
+
+@media screen and (max-width:950px){
+    .show-mobile{
+        display: block;
+    }
+    .hide-mobile{
+        display: none;
+    }
+}
+
+
+@media screen and (max-width:800px){
+    section{
+        padding: 4vh 1vh;
+    }
+}
+
 @media screen and (max-width:600px){
     #main_title{
         font-size: 4rem;
