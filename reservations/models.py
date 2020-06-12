@@ -1,16 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from enum import Enum
-import time, datetime
 from datetime import timedelta
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 
 class MyUser(AbstractUser):
     prenom = models.CharField('Prenom', max_length=200)
     nom = models.CharField('Nom', max_length=200)
     credit = models.IntegerField('credits', default=1)
-    
+    telephone = models.CharField(max_length=10, blank=True, null=True)
+
     def __str__(self):
         return self.email
 
@@ -44,9 +44,11 @@ class Cours(models.Model):
     jour = models.CharField('Jour de la semaine', max_length=20,
         choices=JOUR_DE_LA_SEMAINE)
     actif = models.BooleanField('Actif', default=True)
+    actif_every = models.IntegerField("Actif every", default=1)
+    nb_velos = models.IntegerField('Nb de velos disponibles', default=25)
     
     def __str__(self):
-        return "{} - {} - {}h".format(self.nom, self.jour, self.heure)
+        return f"{self.nom} - {self.jour} - {self.heure}h - Actif {self.actif} every {self.actif_every}"
     
     class Meta:
         verbose_name_plural = "cours"
@@ -116,7 +118,6 @@ class Creneau(models.Model):
             if res.user == user:
                 return res
         return None
-
 
 
 class Reservation(models.Model):

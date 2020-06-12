@@ -15,6 +15,24 @@ class Command(BaseCommand):
             yield curr
             curr += delta
     
+    def _create_cours(self, day, cour):
+        date = day
+        new_hour = cour.heure
+        date = date.replace(hour=new_hour.hour,
+                            minute=new_hour.minute, 
+                            second=0,
+                            microsecond=0)
+        obj, created = Creneau.objects.get_or_create(
+            cours=cour,
+            date=date,
+            reservations_max=cour.nb_velos,
+        )
+        if created:
+            print(datetime.now())
+            print("Creneau created")
+            print(obj)
+    
+
     def handle(self, *args, **options):
         cours = Cours.objects.all()
         now = datetime.now()
@@ -25,17 +43,17 @@ class Command(BaseCommand):
             for cour in cours:
                 if cour.actif:
                     if int(self.day_dict[cour.jour]) == int(day.strftime("%w")):
-                        date = day
-                        new_hour = cour.heure
-                        date = date.replace(hour=new_hour.hour,
-                                            minute=new_hour.minute, 
-                                            second=0,
-                                            microsecond=0)
-                        obj, created = Creneau.objects.get_or_create(
-                            cours=cour,
-                            date=date
-                        )
-                        if created:
-                            print(datetime.now())
-                            print("Creneau created")
-                            print(obj)
+                        if cour.actif_every == 1:
+                            self._create_cours(day, cour)
+                        elif cour.actif_every > 1:
+                            # Recupere le dernier creneau pour le jour
+                            creneaux = Creneau.objects.filter(cours=cour).order_by("-date")
+                            if len(creneaux) == 0:
+                                self._create_cours(day, cour)
+                            else:
+                                creneau = creneaux[0]
+                                delta_jours = 7 * cour.actif_every
+                                delta = day - creneau.date
+                                if delta.days >= delta_jours:
+                                    self._create_cours(day, cour)
+

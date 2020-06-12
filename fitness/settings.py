@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["www.aquabike-rieuxvolvestre.fr",
                  "aquabike-rieuxvolvestre.fr",
                  "localhost",
-                 "192.168.1.20"]
+                 "192.168.1.48"]
 
 
 # Application definition
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'fitness.urls'
@@ -146,7 +147,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'tmp')
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'picard.sylvain3@gmail.com'
-EMAIL_HOST_PASSWORD = 'XYRMaa8w'
+EMAIL_HOST_PASSWORD = 'Bonjour_Benkei-1'
 EMAIL_PORT = 587
 
 LOGOUT_REDIRECT_URL = '/'

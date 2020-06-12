@@ -4,11 +4,11 @@ from .models import MyUser, Cours, Creneau, Reservation, Message
 
 @admin.register(MyUser)
 class MyUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'nom', 'prenom', 'email', 'credit')
+    list_display = ('username', 'nom', 'prenom', 'email', 'credit', 'telephone')
 
 @admin.register(Cours)
 class CoursAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'jour', 'heure', 'actif')
+    list_display = ('nom', 'jour', 'heure', 'actif', 'actif_every')
 
 @admin.register(Creneau)
 class CreneauAdmin(admin.ModelAdmin):
