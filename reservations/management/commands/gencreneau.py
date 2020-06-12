@@ -52,7 +52,7 @@ class Command(BaseCommand):
                                 self._create_cours(day, cour)
                             else:
                                 creneau = creneaux[0]
-                                delta_jours = 7 * cour.actif_every
+                                delta_jours = (7 * cour.actif_every) - 1
                                 delta = day - creneau.date
                                 if delta.days >= delta_jours:
                                     self._create_cours(day, cour)

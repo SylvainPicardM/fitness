@@ -48,7 +48,8 @@ class Cours(models.Model):
     nb_velos = models.IntegerField('Nb de velos disponibles', default=25)
     
     def __str__(self):
-        return f"{self.nom} - {self.jour} - {self.heure}h - Actif {self.actif} every {self.actif_every}"
+        #return f"{self.nom} - {self.jour} - {self.heure}h - Actif {self.actif} every {self.actif_every}"
+        return "{} - {} - {}h".format(self.nom, self.jour, self.heure)
     
     class Meta:
         verbose_name_plural = "cours"
@@ -136,7 +137,7 @@ class Reservation(models.Model):
         date = self.creneau.date
         now = timezone.now()
         delta = date - now
-        return delta > timedelta(days=1)
+        return delta > timedelta(hours=6)
         # if delta <= timedelta(days=1):
         #     return False
         # return True
